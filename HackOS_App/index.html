@@ -274,6 +274,42 @@ input[type=datetime-local]{color-scheme:dark;font-size:15px;color:var(--fg);widt
 .otp input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:text}
 #auerr{color:var(--red);font-size:13px;font-weight:600;margin:0 6px 12px}#auerr:empty{display:none}
 #auinst{margin:0 4px 14px}#auinst:empty{display:none}
+
+/* Live · Manage Teams */
+.mgtile{border:1.5px dashed rgba(0,180,216,.5);background:rgba(0,180,216,.07);justify-content:center}
+.mgtile .nm{color:var(--ac)}
+.mg{display:flex;flex-direction:column;height:100%}
+.mg-h{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:6px 20px 12px}
+.mg-h .li{width:44px!important;height:44px!important;border-radius:14px!important}
+.mg-h .tl2{flex:1;min-width:0}
+.mg-t{font-size:19px;font-weight:700;letter-spacing:-.2px;line-height:1.2}
+.mg-t em{font-style:normal;color:var(--ac)}
+.mg-h .dd{order:3;flex:1 1 100%;margin:0}
+.mg-h .dd .fld{min-height:48px;margin:0;border-radius:24px;padding:0 16px}
+.mg-h .dd .sp{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mg-done{height:40px;padding:0 18px;border-radius:20px;font-weight:600;font-size:16px;color:var(--ac);background:rgba(0,180,216,.16);flex:none}
+.mg-s{padding:0 20px 12px}
+.mg-s .sbar{height:40px;border-radius:20px}
+.mgs{flex:1;min-height:0;overflow:auto;border-top:1px solid var(--line);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.mgs::-webkit-scrollbar{display:none}
+.mgt{border-collapse:separate;border-spacing:0;min-width:100%;font-size:14px}
+.mgt th{position:sticky;top:0;z-index:3;background:#11171b;text-align:left;font-size:11px;font-weight:600;color:var(--fg2);text-transform:uppercase;letter-spacing:.5px;padding:0 12px;height:38px;border-bottom:1px solid var(--line);white-space:nowrap}
+.mgt td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:#080b0d;vertical-align:middle}
+.mgt th+th,.mgt td+td{border-left:1px solid var(--line)}
+.mgt .c1{position:sticky;left:0;z-index:2;min-width:168px;box-shadow:1px 0 0 var(--line)}
+.mgt th.c1{z-index:4}
+.mgt tr.gone td:not(.c1){opacity:.55}
+.tn{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--ac2);text-align:left}
+.lkc{display:inline-flex;align-items:center;gap:6px;color:var(--ac);max-width:200px}
+.lkc>span{overflow:hidden;text-overflow:ellipsis}
+.mgsub{font-size:11px;color:var(--fg2);margin-top:4px;white-space:normal;max-width:220px}
+.mgb{height:34px;padding:0 12px;border-radius:17px;display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:13px;transition:transform .15s,opacity .2s}
+.mgb:active{transform:scale(.95)}
+.mgb.ad{background:var(--ac);color:#021a22}
+.mgb.el{background:rgba(255,69,58,.18);color:var(--red)}
+.mgb.dis{opacity:.3;pointer-events:none}
+.askin{margin-top:6px;height:40px;padding:0 12px;border-radius:10px;background:rgba(118,118,128,.28);font-size:15px;text-align:left}
+#mgnone{position:sticky;left:0;width:402px}
 </style>
 </head>
 <body>
@@ -465,7 +501,7 @@ function paint(d){return `<div class="scroll">${d.body}</div><div class="topbar"
 function mk(name,params){const el=document.createElement('div');el.className='screen';el._n=name;el._p=params||{};const d=SC[name](el._p);el._d=d;el.innerHTML=paint(d);d.mount&&d.mount(el);return el}
 function refresh(el){if(!el||!el._n)return;const sc=$('.scroll',el),y=sc?sc.scrollTop:0;const d=SC[el._n](el._p);el._d=d;el.innerHTML=paint(d);$('.scroll',el).scrollTop=y;d.mount&&d.mount(el)}
 const topEl=()=>{const s=V.stacks[V.tab];return s&&s[s.length-1]};
-function refreshAll(){if(!V.role)return;Object.values(V.stacks).forEach(s=>s.forEach(refresh));syncTabs()}
+function refreshAll(){if(!V.role)return;Object.values(V.stacks).forEach(s=>s.forEach(refresh));syncTabs();if(curSheet&&curSheet.name==='manage')refreshSheet()}
 function syncTabs(){const t=topEl();$('#tabs')&&$('#tabs').classList.toggle('hide',!(t&&t._d.tabs));updateBadges()}
 function updateBadges(){const t=$('#tabs');if(!t)return;const un=S.ann.filter(a=>!a.read).length;$$('.tab',t).forEach(b=>{const k=b.dataset.t;let x='';const bn=V.role==='p'?un+(S.help[S.me]?S.help[S.me].uT:0):helpUN();if(k==='msgs'&&bn)x=`<i class="badge">${bn}</i>`;if(V.role==='p'&&k==='pass'&&S.finalized&&!S.passSeen&&S.me)x='<i class="dot"></i>';const o=$('.badge,.dot',b);o&&o.remove();if(x)b.insertAdjacentHTML('beforeend',x)})}
 function startRole(role){$('#homebar').style.display='';V.role=role;V.tabs=TABS[role];V.stacks={};V.panes={};const app=$('#app');app.innerHTML='';S.cur=role==='p'?(myEvs()[0]||S.evs[0]).id:S.cur;S.draftFor=null;S.sdraftFor=null;
@@ -486,7 +522,7 @@ function sheet(name,params){const box=$('#sheetbox');curSheet={name,params:param
 function refreshSheet(){if(!curSheet)return;const box=$('#sheetbox'),y=$('.sb',box).scrollTop,fs=$('.fsc',box),fy=fs?fs.scrollTop:0,d=SH[curSheet.name](curSheet.params);$('.sb',box).innerHTML=d.html;$('.sb',box).scrollTop=y;{const n=$('.fsc',box);n&&(n.scrollTop=fy)}curSheet.nodismiss=d.nodismiss;d.mount&&d.mount(box)}
 function closeSheet(force){if(curSheet&&curSheet.nodismiss&&!force)return;if(curSheet&&curSheet.name==='qr')stopCam();$('#sheets').classList.remove('on');curSheet=null}
 let alertCb=null;
-function ask(o,cb){alertCb=cb;const a=$('#alerts');a.innerHTML=`<div class="alert"><div class="am">${o.icon?ic(o.icon,34):''}<h3>${esc(o.title||'')}</h3>${o.msg?`<p>${esc(o.msg)}</p>`:''}</div><div class="ab">${o.cancel===false?'':`<button data-act="alertK" data-k="0">${esc(o.no||'Cancel')}</button>`}<button class="${o.danger?'d':'p'}" data-act="alertK" data-k="1">${esc(o.ok||'OK')}</button></div></div>`;const i=a.querySelector('.am .ic');if(i)i.style.color=o.danger?'var(--red)':'var(--ac)';a.classList.add('on')}
+function ask(o,cb){alertCb=cb;const a=$('#alerts');a.innerHTML=`<div class="alert"><div class="am">${o.icon?ic(o.icon,34):''}<h3>${esc(o.title||'')}</h3>${o.msg?`<p>${esc(o.msg)}</p>`:''}${o.field?`<input id="askin" class="askin" placeholder="${esc(o.field)}" autocomplete="off">`:''}</div><div class="ab">${o.cancel===false?'':`<button data-act="alertK" data-k="0">${esc(o.no||'Cancel')}</button>`}<button class="${o.danger?'d':'p'}" data-act="alertK" data-k="1">${esc(o.ok||'OK')}</button></div></div>`;const i=a.querySelector('.am .ic');if(i)i.style.color=o.danger?'var(--red)':'var(--ac)';a.classList.add('on');if(o.field)setTimeout(()=>{const i=$('#askin');i&&i.focus()},60)}
 let toastT;function toast(i,t){const e=$('#toast');e.innerHTML=ic(i,20)+'<span>'+esc(t)+'</span>';e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2400)}
 const BN={};let bnId=0;
 function banner(n){if(!n.noLog)logNote(n);if(!S.notifOn)return;const id=++bnId;BN[id]=n;const b=document.createElement('div');b.className='bn glass'+(n.red?' red':'');b.dataset.act='bnTap';b.dataset.id=id;b.innerHTML=`<div class="bi">${ic(n.icon,22)}</div><div class="sp"><b>${esc(n.title)}</b>${n.sub?`<span>${esc(n.sub)}</span>`:''}</div><span class="xs dim">now</span>${n.actions?`<div class="row" style="flex:1 1 100%;gap:10px"><button class="chip lg" style="flex:1;justify-content:center;color:var(--red)" data-act="invNo" data-id="${n.actions}">Decline</button><button class="chip lg sel" style="flex:1;justify-content:center" data-act="invYes" data-id="${n.actions}">Accept</button></div>`:''}`;if(n.actions)b.style.flexWrap='wrap';$('#banners').append(b);if(!n.actions)setTimeout(()=>dismissBn(b),n.hold||5600)}
@@ -693,7 +729,6 @@ SC.helpdesk=()=>{const t=meT();if(!t)return{tabs:0,bar:bar({back:1,title:'Help D
 const liveCard=t=>`<div class="tc tap ${t.elim?'gone':''}" data-act="push" data-n="team" data-id="${t.id}">${av(t.name,40)}<div class="nm">${esc(t.name)}</div><div class="row wrap" style="gap:6px;min-height:22px">${t.arrived?`<span class="row" style="gap:3px;color:var(--ac)">${ic('check',14)}<span class="xs b">Arrived</span></span>`:`<span class="xs dim b">Not arrived</span>`}${t.elim?`<span class="row" style="gap:3px;color:var(--red)">${ic('xmark',14)}<span class="xs b">Out</span></span>`:''}${t.flag?`<span class="row" style="gap:3px;color:var(--red)">${ic('flagf',12)}<span class="xs b">Flagged</span></span>`:''}</div><div class="dots">${S.stages.map((_,i)=>`<i class="${t.elim&&t.elim.stage===i?'x':i<=t.stage?'on':''}"></i>`).join('')}</div></div>`;
 const liveRow=t=>{const u=S.help[t.id]&&S.help[t.id].uO>0;return `<div class="lrow tap" style="padding:12px 16px" data-act="push" data-n="team" data-id="${t.id}">${av(t.name,44)}<div class="sp" style="min-width:0"><b>${esc(t.name)}</b><div class="dim xs" style="margin-top:2px">${esc(ldr(t).n)} · ${esc(t.roll)}</div></div><button class="gb glass" style="width:40px;height:40px;position:relative;color:var(--ac)" data-act="msgTeam" data-id="${t.id}">${ic('bubble',18)}${u?'<i class="dot" style="top:2px;right:2px"></i>':''}</button></div>`};
 const baseTL=f=>{let tl=S.finalized?S.teams.filter(t=>t.short):S.teams;if(f==='in')tl=tl.filter(t=>t.arrived);if(f==='out')tl=tl.filter(t=>t.elim);return tl};
-const liveBody=tl=>!tl.length?empty('search',`<div class="col c" style="align-items:center;gap:6px"><b style="font-size:20px">No Results</b><div class="dim sm" style="text-align:center">Try a team name, leader or roll number</div></div>`):FLV.q.trim()?`<div class="card">${tl.map(liveRow).join('')}</div>`:`<div class="grid2">${tl.map(liveCard).join('')}</div>`;
 document.addEventListener('input',e=>{const t=e.target,d=t.dataset;if(!d)return;
  if(d.lq!=null){FLV.q=t.value;const g=$('#tgrid');g&&(g.innerHTML=liveBody(baseTL(S.liveF||'all').filter(x=>tMatch(x,FLV.q))));const x=$('#lqx');x&&(x.style.display=FLV.q?'':'none')}
  if(d.hq!=null){FH.q=t.value;const l=$('#hl');l&&(l.innerHTML=hList());const x=$('#hqx');x&&(x.style.display=FH.q?'':'none')}});
@@ -903,7 +938,7 @@ SC.team=({id})=>{const t=S.teams.find(x=>x.id===id),N=S.stages.length,last=t.sta
  ${acc('tm-'+id,'people','Members',t.mem.length,memRows(t),true)}
  <div class="card cp row wrap" style="gap:12px">${chip('link','LinkedIn')}${chip('video','Video')}${chip('display','Demo')}<span class="sp"></span>${chip('upload',t.subs,'acc')}</div>
  <div class="row" style="gap:14px;align-items:stretch">${btn('Advance','up2',`data-act="advance" data-id="${t.id}" style="flex:1"`,t.elim||last?'dis':'')}${btn('Eliminate','xmark',`data-act="eliminate" data-id="${t.id}" style="flex:1"`,'danger'+(t.elim?' dis':''))}</div>
- ${h.length?`<div class="sec">${ic('clock',16)}<span>History</span></div><div class="card">${h.map(l=>`<div class="lrow" style="padding:14px 20px"><span style="color:${l.type==='elim'?'var(--red)':'var(--ac)'}">${ic(l.type==='elim'?'xmark':'up2',20)}</span><div class="sp"><b style="font-weight:600">${esc(l.stage)}</b><div class="dim xs">${esc(l.by)}${l.byE?' · '+esc(l.byE):''}</div></div><span class="dim xs">${fmtD(l.ts)}</span></div>`).join('')}</div>`:''}`}};
+ ${h.length?`<div class="sec">${ic('clock',16)}<span>History</span></div><div class="card">${h.map(l=>`<div class="lrow" style="padding:14px 20px"><span style="color:${l.type==='elim'?'var(--red)':'var(--ac)'}">${ic(l.type==='elim'?'xmark':'up2',20)}</span><div class="sp"><b style="font-weight:600">${esc(l.stage)}</b><div class="dim xs">${esc(l.by)}${l.byE?' · '+esc(l.byE):''}${l.note?`<div style="margin-top:3px;color:var(--fg)">“${esc(l.note)}”</div>`:''}</div></div><span class="dim xs">${fmtD(l.ts)}</span></div>`).join('')}</div>`:''}`}};
 SC.amsgs=()=>({tabs:1,bar:bar({right:`<button class="gp glass" data-act="sheet" data-n="post">${ic('plus',20)}<span>Announce</span></button>`}),body:msgBody(`<div class="card"><div class="lrow tap" data-act="push" data-n="announcements"><div class="li">${ic('megaphone',24)}</div><div class="sp h2">Announcements</div><span class="nb">${annAct().length}</span>${ic('chr',18,'dim')}</div><div class="lrow tap" data-act="push" data-n="inbox"><div class="li">${ic('shield',24)}</div><div class="sp"><div class="h2">Help Desk</div><div class="dim xs">Messages from teams</div></div>${helpUN()?`<span class="nb red">${helpUN()}</span>`:''}${ic('chr',18,'dim')}</div><div class="lrow tap" data-act="push" data-n="orgchat"><div class="li">${ic('people',24)}</div><div class="sp h2">Organizers</div><span class="nb">${S.orgChat.length}</span>${ic('chr',18,'dim')}</div></div>`)});
 /* ---------- sheets ---------- */
 SH.apple=({busy,who})=>({nodismiss:!!busy,html:`<div class="col c" style="align-items:center;gap:20px;padding-top:10px"><div style="width:68px;height:68px;border-radius:22px;background:var(--fg);color:#000;display:grid;place-items:center">${ic('apple',38)}</div>
@@ -1200,7 +1235,7 @@ Object.assign(A,{
  tab:d=>{closeSheet(true);switchTab(d.t,d.t===V.tab)},
  push:d=>{if(d.n==='report'&&!S.teams.length)return ask({icon:'chart',title:'No Report Yet',msg:'No teams have registered for this event right now. The report will be available once registrations come in.',cancel:false,ok:'OK'});push(d.n,{id:d.id,ro:!!d.ro})},
  sheet:d=>sheet(d.n,{id:d.id}),
- alertK:d=>{$('#alerts').classList.remove('on');const cb=alertCb;alertCb=null;if(d.k==='1'&&cb)cb()},
+ alertK:d=>{const v=(($('#askin')||{}).value||'').trim();$('#alerts').classList.remove('on');const cb=alertCb;alertCb=null;if(d.k==='1'&&cb)cb(v)},
  bnTap:(d,el)=>{const n=BN[d.id];dismissBn(el);n&&dest(n)},
  signOut:()=>{closeSheet(true);showSignIn()},
  delAcct:()=>ask({icon:'trash',title:'Delete account?',msg:'This permanently removes your account and all of its data. This cannot be undone.',ok:'Delete',danger:true},()=>{closeSheet(true);DB.accts=DB.accts.filter(x=>x!==V.acct);showSignIn();setTimeout(()=>toast('trash','Account deleted'),400)}),
@@ -1257,7 +1292,7 @@ Object.assign(A,{
  calAdd:()=>{S.cal=true;icsDownload();closeSheet();refreshAll();setTimeout(()=>toast('calplus','Added to Calendar'),250)},
  subType:d=>{S.sub.type=d.k;S.sub.val='';S.sub.file=null;S.sub.prog=0;refreshSheet()},
  pickFile:()=>{const i=$('#fsub');i.value='';i.click()},
- submitProj:(d,el)=>{el.classList.add('busy');setTimeout(()=>{const t=meT(),s=S.sub;S.subs.push({type:s.type,val:s.type==='file'?s.file:s.val,stage:stageIdx()});t.subs++;note(['a','o'],{ev:S.cur,icon:'upload',title:'New submission',sub:t.name+' · '+S.event.name,go:'live'});S.act.push({ic:'upload',tx:t.name,ts:Date.now()});s.state='done';refreshSheet();refreshAll()},900)},
+ submitProj:(d,el)=>{el.classList.add('busy');setTimeout(()=>{const t=meT(),s=S.sub;S.subs.push({type:s.type,val:s.type==='file'?s.file:s.val,stage:stageIdx()});t.sub=t.sub||{};const _o=teamSub(t,stageIdx())||(t.sub[stageIdx()]={});_o[({link:'link',repo:'repo',file:'file',video:'video',slides:'slides'})[s.type]||'link']={val:String(s.type==='file'?(s.file&&s.file.name||s.file):s.val),by:ST[0].n,ts:Date.now()};t.subs++;note(['a','o'],{ev:S.cur,icon:'upload',title:'New submission',sub:t.name+' · '+S.event.name,go:'live'});S.act.push({ic:'upload',tx:t.name,ts:Date.now()});s.state='done';refreshSheet();refreshAll()},900)},
  subAgain:()=>{Object.assign(S.sub,{val:'',file:null,prog:0,state:'form'});refreshSheet()},
  goReg:()=>{closeSheet();switchTab('events',true)},
  sendChat:d=>{if(d.k&&d.k.startsWith('help:'))return A.sendHelp(d.k.slice(5));const key=d.k,list=key==='org'?S.orgChat:S.chat,i=$('#chatin'),v=i.value.trim();if(!v)return;const m={w:key==='org'?actor().n:'You',m:v,me:true,lbl:key==='org'};list.push(m);if(key==='org')note(['a','o'],{ev:S.cur,icon:'people',title:actor().n+' in Organizers',sub:v,go:'orgchat',by:actor().email});$('#msgs').insertAdjacentHTML('beforeend',msgHTML(m));i.value='';S.chatIn={};$('#chatsend').classList.add('dis');const sc=$('.scroll',topEl());sc.scrollTo({top:sc.scrollHeight,behavior:'smooth'});const who=key==='org'?'Divya':'Aarav';
@@ -1309,8 +1344,6 @@ Object.assign(A,{
  goLive:()=>{closeSheet(true);switchTab('live',true)},
  liveF:d=>{S.liveF=d.v;refresh(topEl())},
  broadcast:(d,el)=>{const x=S.annDraft;if(!x||!x.type)return;el.classList.add('busy');setTimeout(()=>{S.ann.push({id:Date.now(),type:x.type,pri:x.pri,until:x.until,stage:stageIdx(),title:x.title.trim(),body:x.body.trim(),ts:Date.now(),read:false});S.annDraft=null;note(['a','o'],{ev:S.cur,icon:'megaphone',title:'Announcement sent',sub:x.title.trim(),by:actor().email});queue({icon:'megaphone',title:x.title.trim(),dest:'ann'});closeSheet();refreshAll();toast('megaphone','Announcement sent')},800)},
- advance:d=>{const t=S.teams.find(x=>x.id===d.id);if(t.elim||t.stage>=S.stages.length-1)return;t.stage++;S.log.push({type:'adv',team:t.name,tid:t.id,by:actor().n,byE:actor().email,stage:S.stages[t.stage].name,ts:Date.now()});S.act.push({ic:'up2',tx:t.name,ts:Date.now()});note(['a','o'],{ev:S.cur,icon:'up2',title:t.name+' advanced',sub:S.stages[t.stage].name+' · by '+actor().n,go:'live',by:actor().email});if(t.id===S.me)queue({icon:'up2',title:S.stages[t.stage].name,dest:'result'});refreshAll()},
- eliminate:d=>{const t=S.teams.find(x=>x.id===d.id);ask({icon:'xmark',title:'Eliminate '+t.name+'?',danger:1,ok:'Eliminate'},()=>{t.elim={stage:t.stage,ts:Date.now()};S.log.push({type:'elim',team:t.name,tid:t.id,by:actor().n,byE:actor().email,stage:S.stages[t.stage].name,ts:Date.now()});S.act.push({ic:'xmark',tx:t.name,ts:Date.now()});note(['a','o'],{ev:S.cur,icon:'xmark',red:true,title:t.name+' eliminated',sub:S.stages[t.stage].name+' · by '+actor().n,go:'live',by:actor().email});if(t.id===S.me)queue({icon:'xmark',red:true,title:S.stages[t.stage].name,dest:'result'});refreshAll()})},
  scanT:d=>{if(S.scan.phase==='scanning')return;S.scan={sel:d.id,phase:'scanning'};refreshSheet();setTimeout(()=>{if(S.scan.sel===d.id){S.scan.phase='found';refreshSheet()}},1100)},
  markIn:()=>{const t=S.teams.find(x=>x.id===S.scan.sel);t.arrived=true;t.arrivedAt=Date.now();S.act.push({ic:'check',tx:t.name,ts:Date.now()});S.scan.phase='done';refreshSheet();refreshAll();setTimeout(()=>{if(S.scan.phase==='done'){S.scan={sel:null,phase:'idle'};curSheet&&curSheet.name==='qr'&&refreshSheet()}},1400)},
  closeEvent:()=>ask({icon:'flag',title:'Close '+S.event.name+'?',msg:'This ends the event for everyone.',danger:1,ok:'Close Event'},()=>{S.event.closed=true;note(['a','o'],{ev:S.cur,icon:'flag',title:'Event closed',sub:S.event.name+' · by '+actor().n,by:actor().email});refreshAll();toast('flag','Event closed')}),
@@ -1323,6 +1356,47 @@ document.addEventListener('click',e=>{if(!e.target.closest('.dd'))$$('.dd.open')
 (function(){let y0=null,box=null;document.addEventListener('pointerdown',e=>{if(e.target.closest('.grab')){box=$('#sheetbox');y0=e.clientY;box.style.transition='none'}});
  document.addEventListener('pointermove',e=>{if(y0==null)return;box.style.transform=`translateY(${Math.max(0,e.clientY-y0)}px)`});
  document.addEventListener('pointerup',e=>{if(y0==null)return;const dy=e.clientY-y0;box.style.transition='';box.style.transform='';y0=null;if(dy>90)closeSheet()})})();
+/* ---------- Live · recent teams + Manage Teams sheet ---------- */
+/* ---------- iPad: Live · recent teams + Manage Teams sheet ---------- */
+Object.assign(P,{table:'<rect x="3.500" y="5" width="17" height="14" rx="2.500"/><path d="M3.500 10h17M3.500 14.500h17M9.500 5v14"/>'});
+const hsh=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h};
+const SUBK=['link','repo','file','video','slides'],SUBI={link:'link',repo:'repo',video:'video',slides:'display',file:'upload'},SUBL={link:'Link',repo:'Repo',video:'Video',slides:'Slides',file:'File'};
+function teamSub(t,si){t.sub=t.sub||{};if(t.sub[si])return t.sub[si];
+ const cap=t.elim?t.elim.stage:stageIdx();if(si<1||si>cap||!S.stages[si])return null;
+ const sl=x=>x.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),slug=sl(t.name),sg=sl(S.stages[si].name),o={};
+ SUBK.forEach(k=>{const h=hsh(t.id+':'+si+':'+k);if(h%3===0)return;
+  const val={link:`${slug}.dev/${sg}`,repo:`github.com/${slug}/${sg}`,video:`youtu.be/${(h>>>3).toString(36).slice(0,8)}`,slides:`slides.google.com/d/${(h>>>5).toString(36).slice(0,8)}`,file:`${slug}-${sg}.pdf`}[k];
+  o[k]={val,by:ST[t.mem[h%t.mem.length]].n,ts:Date.now()-((h%36)+1)*36e5-(stageIdx()-si)*864e5}});
+ return Object.keys(o).length?(t.sub[si]=o):null}
+const subMin=ss=>ss?Math.min(...Object.values(ss).map(x=>x.ts)):Infinity;
+const bySub=(L,si)=>L.map((t,i)=>[t,i,teamSub(t,si)]).sort((a,b)=>subMin(a[2])-subMin(b[2])||a[1]-b[1]).map(x=>x[0]);
+const mgTile=n=>`<div class="tc tap mgtile" data-act="mgOpen"><span class="li">${ic('table',24)}</span><div class="nm">Manage Teams</div><div class="xs dim b">${n} team${n==1?'':'s'} · review, advance, eliminate</div></div>`;
+const liveBody=tl=>{if(!tl.length)return empty('search',`<div class="col c" style="align-items:center;gap:6px"><b style="font-size:20px">No Results</b><div class="dim sm" style="text-align:center">Try a team name, leader or roll number</div></div>`);
+ if(FLV.q.trim())return `<div class="card">${tl.map(liveRow).join('')}</div>`;
+ const f=S.liveF||'all',sh=f==='all'?bySub(tl,stageIdx()).slice(0,5):tl;
+ return `<div class="grid2">${sh.map(liveCard).join('')}${mgTile(tl.length)}</div>`};
+const mgLink=(v,i)=>v?`<span class="lkc">${ic(i,15)}<span>${esc(v)}</span></span>`:'<span class="dim">—</span>';
+SH.manage=()=>{const mg=S.mg||(S.mg={stage:stageIdx(),sx:0}),N=S.stages.length,si=Math.min(Math.max(0,mg.stage),N-1),cur=stageIdx(),L=bySub(baseTL('all'),si),out=L.filter(t=>t.elim).length;
+ const rows=L.map(t=>{const ss=teamSub(t,si),l=ldr(t),last=t.stage>=N-1,el=t.elim&&S.log.filter(x=>x.tid===t.id&&x.type==='elim').pop(),lk=t.links||{};
+  const st=t.elim?`<span class="chip red">${ic('xmark',14)}<span>Out · ${esc(S.stages[t.elim.stage].name)}</span></span>${el?`<div class="mgsub">by ${esc(el.by)}${el.note?' · “'+esc(el.note)+'”':''}</div>`:''}`:`<span class="chip acc">${ic(SIC[t.stage%6],14)}<span>${esc(S.stages[t.stage].name)}</span></span>`;
+  const sc=k=>{const x=ss&&ss[k];return x?`<span class="lkc">${ic(SUBI[k],15)}<span>${esc(x.val)}</span></span><div class="mgsub">${esc(x.by)} · ${ago(x.ts)} ago</div>`:`<span class="dim">${si<1?'—':'Not submitted'}</span>`};
+  return `<tr class="${t.elim?'gone':''}" data-q="${esc(nz(t.name+' '+l.n+' '+l.roll))}"><td class="c1"><button class="tn" data-act="mgTeam" data-id="${t.id}">${av(t.name,30)}<span>${esc(t.name)}</span>${t.flag?`<span style="color:var(--red)">${ic('flagf',14)}</span>`:''}</button></td><td>${esc(l.n)}</td><td class="mono">${esc(l.roll)}</td><td>${st}</td>${SUBK.map(k=>`<td>${sc(k)}</td>`).join('')}<td>${mgLink(lk.li,'link')}</td><td>${mgLink(lk.video,'video')}</td><td>${mgLink(lk.proto,'display')}</td><td class="cE"><div class="row" style="gap:8px"><button class="mgb ad ${t.elim||last?'dis':''}" data-act="advance" data-id="${t.id}">${ic('up2',16)}<span>Advance</span></button><button class="mgb el ${t.elim?'dis':''}" data-act="eliminate" data-id="${t.id}">${ic('xmark',16)}<span>Eliminate</span></button></div></td></tr>`}).join('');
+ return {tall:1,wide:1,mount:b=>{const s=$('.mgs',b),q=$('#mgq',b),x=$('#mgx',b);if(!s)return;s.scrollLeft=mg.sx||0;s.addEventListener('scroll',()=>{mg.sx=s.scrollLeft},{passive:true});
+  const run=()=>{const v=nz(mg.q||''),R=$$('.mgt tbody tr',b);let n=0;R.forEach(r=>{const ok=!v||r.dataset.q.includes(v);r.style.display=ok?'':'none';if(ok)n++});x.style.display=mg.q?'':'none';const e=$('#mgnone',b);e&&(e.style.display=R.length&&!n?'':'none');const c=$('#mgc',b);c&&(c.textContent=v?n+' of '+R.length+' team'+(R.length==1?'':'s'):c.dataset.t)};
+  q.value=mg.q||'';q.addEventListener('input',()=>{mg.q=q.value;run()});x.addEventListener('click',()=>{mg.q='';q.value='';run();q.focus()});run();if(mg.focus){q.focus();const n=q.value.length;q.setSelectionRange(n,n)}q.addEventListener('focus',()=>mg.focus=1);q.addEventListener('blur',()=>mg.focus=0)},
+ html:`<div class="mg"><div class="mg-h"><div class="li" style="width:48px;height:48px;border-radius:16px">${ic('table',26)}</div><div class="tl2"><div class="mg-t">${esc(S.event.name)} <em>• ${esc(S.stages[si].name)}</em></div><div class="dim sm" id="mgc" data-t="${L.length} team${L.length==1?'':'s'} · ${L.length-out} active${out?' · '+out+' out':''}">${L.length} teams</div></div>${dd('mgs','layers',String(si),S.stages.map((s,i)=>[String(i),s.name+(i===cur?' · Current':''),SIC[i%6]]),'mgStage')}<button class="mg-done" data-act="closeSheet">Done</button></div>
+ <div class="mg-s"><label class="sbar">${ic('search',18)}<input id="mgq" type="search" placeholder="Search team, leader or roll number" autocomplete="off" autocapitalize="off"><button class="sx" id="mgx" style="display:none">${ic('xmark',12)}</button></label></div>
+ <div class="mgs fsc">${L.length?`<table class="mgt"><thead><tr><th class="c1">Team</th><th>Team Leader</th><th>Roll No.</th><th>Status</th><th>Project Link</th><th>Repo Link</th><th>File</th><th>Video Link</th><th>Slides Link</th><th>LinkedIn</th><th>Video</th><th>Prototype</th><th class="cE">Actions</th></tr></thead><tbody>${rows}</tbody></table><div id="mgnone" style="display:none">${empty('search',`<div class="col c" style="align-items:center;gap:6px"><b style="font-size:20px">No Results</b><div class="dim sm">Try a team name, leader or roll number</div></div>`)}</div>`:empty('people')}</div></div>`}};
+Object.assign(A,{mgOpen:()=>{S.mg={stage:stageIdx(),sx:0,q:''};sheet('manage')},mgStage:d=>{S.mg.stage=+d.v;refreshSheet()},mgTeam:d=>{closeSheet(true);push('team',{id:d.id})}});
+const noteN=(t,kind,sn,by)=>{const adv=kind==='adv';note(['a','o'],{ev:S.cur,icon:adv?'up2':'xmark',red:!adv,title:t.name+(adv?' advanced':' eliminated'),sub:sn+' · by '+by.n,go:'live',by:by.email});if(t.id===S.me)queue({icon:adv?'up2':'xmark',red:!adv,title:sn,dest:'result'})};
+const moveTeam=(t,kind,txt)=>{const by=actor();
+ if(kind==='adv')t.stage++;else t.elim={stage:t.stage,ts:Date.now()};
+ const sn=S.stages[t.stage].name;S.log.push({type:kind,team:t.name,tid:t.id,by:by.n,byE:by.email,stage:sn,note:txt||'',ts:Date.now()});
+ S.act.push({ic:kind==='adv'?'up2':'xmark',tx:t.name,ts:Date.now()});noteN(t,kind,sn,by);refreshAll()};
+Object.assign(A,{
+ advance:d=>{const t=S.teams.find(x=>x.id===d.id);if(!t||t.elim||t.stage>=S.stages.length-1)return;ask({icon:'up2',title:'Advance '+t.name,msg:'Moving to '+S.stages[t.stage+1].name,field:'Note (optional)',ok:'Advance'},n=>{if(t.elim||t.stage>=S.stages.length-1)return;moveTeam(t,'adv',n)})},
+ eliminate:d=>{const t=S.teams.find(x=>x.id===d.id);if(!t||t.elim)return;ask({icon:'xmark',title:'Eliminate '+t.name,field:'Reason (optional)',danger:1,ok:'Eliminate'},n=>{if(t.elim)return;moveTeam(t,'elim',n)})}});
+
 /* ---------- ticker ---------- */
 const tick={};
 setInterval(()=>{$$('[data-cd]').forEach(e=>e.textContent=cdShort(+e.dataset.cd));$$('[data-cdp]').forEach(e=>{const p=parts(+e.dataset.ts);e.textContent=pad(p[e.dataset.cdp])});
