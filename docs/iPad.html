@@ -75,7 +75,7 @@ input::placeholder,textarea::placeholder{color:var(--fg3)}
 .btn.dis{opacity:.32;pointer-events:none}
 .btn.busy{pointer-events:none}.btn.busy>*{opacity:0}.btn.busy:after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;border:3px solid rgba(2,26,34,.25);border-top-color:#021a22;animation:spin .7s linear infinite}
 .btn{position:relative}
-.fab{position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:50%;background:var(--ac);color:#021a22;display:grid;place-items:center;z-index:20;box-shadow:0 10px 28px rgba(0,180,216,.4),0 2px 6px rgba(0,0,0,.5);transition:transform .15s}
+.fab{position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:50%;background:var(--em);color:#021a22;display:grid;place-items:center;z-index:20;box-shadow:0 10px 28px rgba(16,185,129,.45),0 2px 6px rgba(0,0,0,.5);transition:transform .15s}
 .fab:active{transform:scale(.92)}
 mark{background:rgba(0,180,216,.3);color:inherit;border-radius:3px;padding:0 1px}
 .flash{animation:flash 2.2s ease-out}@keyframes flash{0%,55%{outline:3px solid var(--ac);outline-offset:3px}100%{outline:3px solid transparent;outline-offset:3px}}
@@ -366,13 +366,10 @@ html,body{overflow:hidden}
 .pane:not(.split) .screen[data-n=live] #tgrid .grid2{grid-template-columns:repeat(3,1fr)}
 
 /* ---------- overlays ---------- */
-.sheet{left:50%;right:auto;bottom:auto;top:50%;width:560px;max-height:calc(100% - 72px);border-radius:34px;transform:translate(-50%,-44%) scale(.96);opacity:0;transition:transform .4s cubic-bezier(.22,.8,.24,1),opacity .28s;box-shadow:inset 0 1px 0 rgba(202,240,248,.15),0 30px 90px rgba(0,0,0,.65)}
-#sheets.on .sheet{transform:translate(-50%,-50%);opacity:1}
-.sheet .grab{display:none}
-.sheet .sb{padding:26px 30px 34px}
-.sheet.tall{top:50%;left:50%;width:640px;height:min(740px,calc(100% - 56px));max-height:none}
-.sheet.full{left:0;top:0;right:0;bottom:0;width:auto;height:auto;transform:none!important;opacity:0;border-radius:0}
-#sheets.on .sheet.full{opacity:1}
+.sheet{left:0;right:0;margin:0 auto;bottom:8px;top:auto;width:640px;max-width:calc(100% - 16px);max-height:calc(100% - 56px);border-radius:38px}
+.sheet .sb{padding:18px 30px 34px}
+.sheet.tall{top:auto;width:640px;height:min(780px,calc(100% - 56px));max-height:none}
+.sheet.full{left:0;right:0;top:0;bottom:0;margin:0;width:auto;max-width:none;height:auto;max-height:none;border-radius:0}
 .sh-x{top:16px;right:18px}
 .alert{width:330px}
 #banners{top:34px;left:50%;right:auto;width:460px;margin-left:-230px}
@@ -414,13 +411,11 @@ html,body{overflow:hidden}
 .cta.cta-in{position:static;margin:28px 0 8px;left:auto;right:auto}
 .sheet{visibility:hidden;transition:transform .4s cubic-bezier(.22,.8,.24,1),opacity .28s,visibility 0s .4s}
 #sheets.on .sheet{visibility:visible;transition:transform .4s cubic-bezier(.22,.8,.24,1),opacity .28s,visibility 0s}
-.sheet.full{transition:opacity .28s,visibility 0s .3s}
-#sheets.on .sheet.full{transition:opacity .28s,visibility 0s}
 
 /* ---------- Live · Manage Teams ---------- */
 .mgtile{border:1.5px dashed rgba(0,180,216,.5);background:rgba(0,180,216,.07);justify-content:center}
 .mgtile .nm{color:var(--ac)}
-.sheet.wide{width:min(1120px,calc(100% - 48px));height:min(760px,calc(100% - 48px))}
+.sheet.wide{width:min(1120px,calc(100% - 16px));height:min(760px,calc(100% - 56px))}
 .mg{display:flex;flex-direction:column;height:100%}
 .mg-h{display:flex;align-items:center;gap:14px;padding:22px 26px 16px}
 .mg-h .tl2{flex:1;min-width:0}
@@ -1033,14 +1028,14 @@ const act0=()=>S.finalized?S.teams.filter(t=>t.short&&!t.elim):S.teams.filter(t=
 const aEvCard=e=>{const [i,t,v]=evStatus(e);return `<div class="card ev tap" data-act="aOpen" data-id="${e.id}"><div class="poster" style="aspect-ratio:16/8">${postr(e)}<div class="pchips">${e.published?chip(i,t,v):chip('pencil','Draft','dim')}${ownsEv(e)?'':chip('lock','View only','vo')}</div></div><div class="cp row"><div class="sp"><div class="h1" style="font-size:20px">${esc(e.name)}</div><div class="dim sm" style="margin-top:4px">${chip('pin',e.venue,'dim')}${ownsEv(e)?'':'<span class="xs" style="margin-left:6px">by '+esc(ownerName(e))+'</span>'}</div></div>${chip('people',e.teams.length,'acc')}${ic('chr',18,'dim')}</div></div>`};
 SC.ahome=()=>V.org?({tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">My Event</div>${evsw()}
  ${flBox('oh',FV.oh[0],FV.oh[1])}
- ${btn('Join Event','plus','data-act="joinOpen"','ghost')}`}):({tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">All Events</div>
+`,bottom:`<div class="fab tap" role="button" aria-label="Join Event" data-act="joinOpen">${ic('plus',26)}</div>`}):({tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">All Events</div>
  ${flBox('ah',FV.ah[0],FV.ah[1])}`,bottom:`<div class="fab tap" role="button" aria-label="Create New Event" data-act="ndOpen">${ic('plus',26)}</div>`});
 SC.aevent=()=>{const e=S.event,T=S.teams.length,sh=S.teams.filter(t=>t.short).length,ar=S.teams.filter(t=>t.arrived).length,ac=act0().length,[si,st,sv]=evStatus(e);
  const stat=(cls,i,n,l)=>`<div class="stat ${cls}"><div class="li">${ic(i,20)}</div><div class="n">${n}</div><div class="l">${l}</div></div>`;
  return {tabs:1,bar:bar({back:1,title:esc(e.name)}),body:`<div class="card"><div class="poster" style="aspect-ratio:16/8">${postr(e)}<div class="pchips">${e.published?chip(si,st,sv):chip('pencil','Draft','dim')}</div></div><div class="cp row"><div class="h1 sp">${esc(e.name)}</div>${V.org&&e.closed?chip('lock','Read only','red'):''}${chip('layers',(e.closed?S.stages.length:stageIdx()+1)+'/'+S.stages.length,'acc')}</div></div>
  ${ownsEv(e)?'':`<div class="card cp row" style="gap:12px;padding:14px 18px"><span class="li" style="width:40px;height:40px;border-radius:14px">${ic('lock',20)}</span><div class="sp"><b>View only</b><div class="dim xs">Created by ${esc(ownerName(e))}. Only they can edit this event.</div></div></div>`}
  <div class="grid2" style="margin-bottom:16px">${stat('hi','idcard',T,'Registered')}${stat('em','check',sh,'Shortlisted')}${stat('','qr',ar,'Arrived')}${stat('lt2','bolt',ac,'Active')}</div>
- <div class="card"><div class="lrow tap" data-act="push" data-n="report"><div class="li">${ic('chart',22)}</div><b class="sp">Event Report</b>${ic('chr',18,'dim')}</div>${V.org?'':`<div class="lrow tap" data-act="push" data-n="access"><div class="li">${ic('lock',22)}</div><b class="sp">Organizer Access</b><span class="nb">${e.access.members.length}</span>${ic('chr',18,'dim')}</div>`}</div>
+ <div class="card"><div class="lrow tap" data-act="push" data-n="report"><div class="li">${ic('chart',22)}</div><b class="sp">Event Report</b>${ic('chr',18,'dim')}</div>${V.org?'':ownsEv(e)?`<div class="lrow tap" data-act="push" data-n="access"><div class="li">${ic('lock',22)}</div><b class="sp">Organizer Access</b><span class="nb">${e.access.members.length}</span>${ic('chr',18,'dim')}</div>`:lockRow('Organizer Access')}</div>
  ${ownsEv(e)?btn('Close Event','flag','data-act="push" data-n="close"','danger'):''}`}};
 SC.report=()=>{const T=S.teams,sh=T.filter(t=>t.short).length,ar=T.filter(t=>t.arrived).length,N=S.stages.length,fin=T.filter(t=>t.stage>=N-1&&!t.elim).length;
  const fun=[['idcard',T.length,'Registered'],['check',sh,'Shortlisted'],['qr',ar,'Checked in'],['trophy',fin,'Finalists']],mx=Math.max(1,T.length);
@@ -1069,6 +1064,7 @@ SC.orgs=()=>{const e=S.event,a=e.access,M=a.members,act=M.filter(m=>!m.revoked).
  ${M.length?`<div class="card">${M.map((m,i)=>`<div class="lrow" style="align-items:flex-start;${m.revoked?'opacity:.6':''}">${av(m.name,46)}<div class="sp"><div class="h2" style="font-size:16px">${esc(m.name)}</div><div class="dim xs" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.email)}</div><div class="dim xs">${esc(m.roll)} · Added ${fmtD(m.since).split(',')[0]}</div><div style="margin-top:8px">${m.revoked?chip('xmark','Revoked','red'):chip('check','Active','acc')}</div></div><button class="chip ${m.revoked?'acc':'red'}" data-act="accMem" data-i="${i}">${m.revoked?'Restore':'Revoke'}</button></div>`).join('')}</div>`:empty('people')}
  <div class="card"><div class="lrow tap" data-act="push" data-n="access"><div class="li">${ic('lock',22)}</div><div class="sp"><b>Event ID &amp; password</b><div class="dim xs mono">${esc(a.id)}</div></div>${ic('chr',18,'dim')}</div></div>
  <div class="dim sm" style="margin:0 8px">Organizers who sign in with ${esc(a.id)} appear here. Revoking removes their access to this event right away.</div>`}};
+['access','orgs'].forEach(k=>{const f=SC[k],t=k==='orgs'?'Manage Organizers':'Organizer Access';SC[k]=()=>ownsEv(S.event)?f():({tabs:0,bar:bar({back:1,title:t}),body:`<div class="col c" style="align-items:center;gap:14px;padding:60px 20px;text-align:center"><div class="li" style="width:88px;height:88px;border-radius:30px">${ic('lock',40)}</div><div class="h1">Locked</div><div class="dim sm">Organizer credentials for ${esc(S.event.name)} are visible only to ${esc(ownerName(S.event))}, who created it.</div></div>`})});
 SC.close=()=>{const e=S.event,T=S.teams.length,ar=S.teams.filter(t=>t.arrived).length,el=S.teams.filter(t=>t.elim).length;
  return {tabs:0,bar:bar({back:1,title:'Close Event'}),body:`<div class="col c" style="align-items:center;gap:22px;padding:10px 0 30px">${e.closed?`<div>${okmark(130)}</div>`:ring(progress(),150,12,`<span style="color:var(--ac)">${ic('flag',58)}</span>`)}<div class="h1">${esc(e.name)}</div></div>
  <div class="card cp row" style="justify-content:space-around;padding:24px 12px">${kpi('idcard',T,T,'Registered')}${kpi('qr',ar,Math.max(T,1),'Arrived')}${kpi('xmark',el,Math.max(T,1),'Eliminated')}</div>`,
@@ -1094,7 +1090,7 @@ SC.create=()=>{if(S.draftFor!==S.cur){S.draft=pickEF(S.event);S.draftFor=S.cur}c
  ${acc('c-dl','clock','Deadlines',fmtD(d.deadlines.reg).split(',')[0],`<div style="padding-top:6px">${dl}</div>`)}
  ${V.org?locked:''}
  ${V.org?'':acc('c-sz','people','Team Size',d.min+'–'+d.max,`<div class="row" style="padding-top:4px"><span class="dim">${ic('person',22)}</span>${stepper('min',d.min)}<span class="sp"></span><span class="dim">${ic('people',22)}</span>${stepper('max',d.max)}</div>`)}
- <div class="card"><div class="lrow tap" data-act="push" data-n="stages"><div class="li">${ic('layers',22)}</div><b class="sp">Stage Builder</b><span class="nb">${S.stages.length}</span>${ic('chr',18,'dim')}</div>${V.org?'':`<div class="lrow tap" data-act="push" data-n="orgs"><div class="li">${ic('people',22)}</div><b class="sp">Manage Organizers</b><span class="nb">${S.event.access.members.length}</span>${ic('chr',18,'dim')}</div>`}</div><div style="height:30px"></div>`,
+ <div class="card"><div class="lrow tap" data-act="push" data-n="stages"><div class="li">${ic('layers',22)}</div><b class="sp">Stage Builder</b><span class="nb">${S.stages.length}</span>${ic('chr',18,'dim')}</div>${V.org?'':ownsEv(S.event)?`<div class="lrow tap" data-act="push" data-n="orgs"><div class="li">${ic('people',22)}</div><b class="sp">Manage Organizers</b><span class="nb">${S.event.access.members.length}</span>${ic('chr',18,'dim')}</div>`:lockRow('Manage Organizers')}</div><div style="height:30px"></div>`,
  bottom:`<div class="cta" style="bottom:104px">${V.org&&!pubd?btn('Not published yet','lock','','dis'):btn(pubd?'Update Event':'Publish Event',pubd?'check':'upload','id="pubbtn" data-act="publish"')}</div>`}};
 SC.newev=()=>{const d=S.nd,tg=(k,v,on,i)=>`<span class="chip lg ${on?'sel':''}" data-act="ndTog" data-k="${k}" data-v="${v}">${i?ic(i,16):''}${esc(v)}</span>`;
  const dt=(k,i,lb)=>`<div class="dim xs b" style="margin:0 6px 6px;text-transform:uppercase;letter-spacing:.5px">${lb}</div><label class="fld" style="margin-bottom:12px"><span class="fi">${ic(i,20)}</span><input type="datetime-local" data-ndate="${k}" value="${toLocal(d.deadlines[k])}"></label>`;
@@ -1206,7 +1202,7 @@ SH.auth=()=>{const a=S.au,f=a.f,st=a.step,up=a.mode==='up';
  const seg=(items,cur,act)=>`<div class="seg" style="margin-bottom:16px">${items.map(([k,l])=>`<span class="chip lg ${cur===k?'sel':''}" style="flex:1;justify-content:center;padding:0 6px" data-act="${act}" data-v="${k}">${l}</span>`).join('')}</div>`;
  const fl=(i,k,ph,o={})=>`<label class="fld"><span class="fi">${ic(i,20)}</span><input data-bind="au.${k}" type="${o.t||'text'}" placeholder="${ph}" value="${esc(f[k])}" autocomplete="off" ${o.x||''}>${o.ok!==undefined?`<span class="ok ${o.ok?'on':''}" data-ok="${k}">${ic('check',20)}</span>`:''}</label>`;
  const err=`<div id="auerr">${esc(a.err)}</div>`;
- const cta=(l,i)=>btn(l,i||'','id="aubtn" data-act="auNext"',auOK()?'':'dis');
+ const cta=(l,i,c='')=>btn(l,i||'','id="aubtn" data-act="auNext"',(auOK()?'':'dis ')+c);
  const orx=`<div class="row" style="margin:18px 0"><div class="sp" style="height:1px;background:var(--line)"></div><span class="dim xs b">OR</span><div class="sp" style="height:1px;background:var(--line)"></div></div><div class="btn appbtn" data-act="auApple">${ic('apple',20)}<span>Sign in with Apple</span></div>`;
  const modes=a.apple?'':seg([['in','Sign In'],['up','Sign Up']],a.mode,'auMode'),roles=seg(AU_ROLES,a.role,'auRole');
  const fl2=auFlow(),ix=fl2.indexOf(st==='linked'?'otp':st),dots=up&&ix>=0?`<div class="dots" style="margin:-8px 0 18px 4px">${fl2.map((_,i)=>`<i class="${i<=ix?'on':''}"></i>`).join('')}</div>`:'';
@@ -1221,7 +1217,7 @@ SH.auth=()=>{const a=S.au,f=a.f,st=a.step,up=a.mode==='up';
   h=head('lock','Enter code','Sent to '+esc(a.otpTo))+dots+`<div class="otp" id="auotp">${[0,1,2,3].map(i=>`<i class="${v.length===i?'on':''}">${v[i]||''}</i>`).join('')}<input data-otp="1" inputmode="numeric" maxlength="4" autocomplete="one-time-code" ${left<=0?'disabled':''}></div>`+err
   +`<div class="col c" style="align-items:center;gap:14px"><span class="dim sm" id="autries">${left>0?left+(left==1?' attempt':' attempts')+' left':'No attempts left'}</span><button id="aurs" class="chip lg ${s>0?'off':''}" data-act="auResend">${s>0?'Resend in 0:'+pad(s):'Resend code'}</button><span class="dim xs">Demo: the code arrives as a Mail notification${S.notifOn?'':' · '+a.otp.code}</span></div>`}
  else if(st==='linked')h=`<div class="col c" style="align-items:center;gap:18px;padding:6px 0 10px">${okmark(96)}<div class="h1">Accounts linked</div><div class="card" style="width:100%;margin:0">${li(a.apple?'apple':'mail','PERSONAL',f.pe)}${li('bank','INSTITUTE',f.ie)}</div></div>`;
- else if(st==='event')h=head('ticket','Join event','Use the ID and password your admin shared.')+fl('tag','evid','Event ID  (#CU101)',{x:'autocapitalize="characters"'})+fl('lock','evpw','Password',{t:'password'})+err+`<div class="dim xs" style="text-align:center;margin:0 6px 14px">Demo · <span class="tap" data-act="auDemo" style="color:var(--ac);font-weight:600">${esc(ev0.access.id)} · ${esc(ev0.access.pw)}</span></div>`+cta('Join Event','plus');
+ else if(st==='event')h=head('ticket','Join event','Use the ID and password your admin shared.')+fl('tag','evid','Event ID  (#CU101)',{x:'autocapitalize="characters"'})+fl('lock','evpw','Password',{t:'password'})+err+`<div class="dim xs" style="text-align:center;margin:0 6px 14px">Demo · <span class="tap" data-act="auDemo" style="color:var(--ac);font-weight:600">${esc(ev0.access.id)} · ${esc(ev0.access.pw)}</span></div>`+cta('Join Event','plus','em');
  return {nodismiss:st==='linked',html:h,mount:()=>setTimeout(()=>{const i=$('#sheetbox [data-otp]')||$('#sheetbox input');i&&i.focus({preventScroll:true})},380)}};
 const teamLocked=(e,t)=>!!(e.closed||t.elim||t.short||e.finalized);
 const isLeader=t=>!!t&&t.id===S.me&&t.mem[0]===0;
@@ -1341,7 +1337,8 @@ const MUT=new Set(['stDelHere','crAdd','crDel','stDelv','stPoster','stUpPoster',
 const ownerName=e=>(DB.accts.find(a=>a.role==='a'&&a.ie===e.owner)||{}).name||'another admin';
 const ownsEv=e=>V.role!=='a'||!!V.org||!e||!e.owner||e.owner===ADM.email;
 const roEv=()=>!ownsEv(S.event);
-const OWN_MUT=new Set([...MUT,'accRev','accMem','sendHelp','msgTeam']);
+const lockRow=t=>`<div class="lrow tap" data-act="ownLock"><div class="li">${ic('lock',22)}</div><div class="sp"><b>${t}</b><div class="dim xs">Only the event owner can manage</div></div>${chip('lock','Locked','dim')}</div>`;
+const OWN_MUT=new Set([...MUT,'accRev','accMem','sendHelp','msgTeam','pwShow','accCopy']);
 function orgGate(act){const e=S.event;
  if(!orgOK(e)){const nm=e.name;V.org.events=V.org.events.filter(i=>i!==e.id);const L=orgEvs(),o={icon:'lock',title:'Access revoked',msg:'Your admin revoked your access to '+nm+'.',cancel:false,danger:1};
   if(L.length){S.cur=L[0].id;S.draftFor=null;S.sdraftFor=null;refreshAll();ask(o)}else{closeSheet(true);showSignIn();ask(o)}
@@ -1411,7 +1408,7 @@ function respondInv(id,yes){const v=S.invites.find(x=>x.id==id);if(!v||v.st!=='p
 let ntId=100;
 const NR=()=>V.org?'o':V.role;
 function myNts(){const k=NR(),me=V.org?V.org.ie:k==='a'?actor().email:ST[0].email,ids=V.org?orgEvs().map(e=>e.id):null;
- return S.nts.filter(n=>n.r.includes(k)&&(!n.to||nrm(n.to)===nrm(me))&&(!n.by||nrm(n.by)!==nrm(me))&&(k!=='o'||n.ev==null||ids.includes(n.ev))).sort((x,y)=>y.ts-x.ts).slice(0,30)}
+ return S.nts.filter(n=>n.r.includes(k)&&!(k==='a'&&n.go==='access'&&!ownsEv(getEv(n.ev)))&&(!n.to||nrm(n.to)===nrm(me))&&(!n.by||nrm(n.by)!==nrm(me))&&(k!=='o'||n.ev==null||ids.includes(n.ev))).sort((x,y)=>y.ts-x.ts).slice(0,30)}
 const unreadN=()=>V.role?myNts().filter(n=>!n.read).length:0;
 function syncNt(){const n=unreadN();$$('.ntb').forEach(b=>{b.textContent=n;b.style.display=n?'':'none'})}
 function note(r,n){S.nts.push(Object.assign({id:++ntId,r,ts:Date.now(),read:false},n));syncNt()}
@@ -1434,7 +1431,7 @@ Object.assign(A,{
  pfSave:()=>{if(!pfOK()||!V.acct)return;const d=pfDept(),y=+S.pf.adm;V.acct.dept=d;V.acct.adm=y;if(V.role==='p')Object.assign(ST[0],{dept:d,adm:y,year:yrOf(y)});S.pf=null;refreshSheet();refreshAll();toast('check','Profile saved')},
  ntGo:d=>{const n=S.nts.find(x=>x.id==d.id);if(!n)return;closeSheet(true);if(V.role==='p'){n.dest&&dest(n);return}
   if(n.ev!=null&&(!V.org||orgEvs().some(e=>e.id===n.ev))){S.cur=n.ev;S.draftFor=null;S.sdraftFor=null;refreshAll()}
-  if(n.go==='help'){switchTab('msgs',true);push('inbox');n.tid&&push('helpthread',{id:n.tid})}else if(n.go==='orgchat'){switchTab('msgs',true);push('orgchat')}else if(n.go==='regs'||n.go==='live')switchTab(n.go,true);else if(n.go==='access'&&!V.org){switchTab('home',true);push('aevent',{});push('access',{})}},
+  if(n.go==='help'){switchTab('msgs',true);push('inbox');n.tid&&push('helpthread',{id:n.tid})}else if(n.go==='orgchat'){switchTab('msgs',true);push('orgchat')}else if(n.go==='regs'||n.go==='live')switchTab(n.go,true);else if(n.go==='access'&&!V.org&&ownsEv(getEv(n.ev))){switchTab('home',true);push('aevent',{});push('access',{})}},
  auDemo:()=>{const f=S.au.f;f.evid=ev0.access.id;f.evpw=ev0.access.pw;S.au.err='';refreshSheet()},
  auResend:()=>{const a=S.au;if(Date.now()<a.otp.until)return;auSend(a.otpTo);toast('mail','New code sent')},
  auNext:(d,el)=>{const a=S.au,f=a.f,st=a.step;if(!auOK())return;
@@ -1516,7 +1513,7 @@ document.addEventListener('change',e=>{const t=e.target;if(t.dataset.date){const
  if(t.id==='fsub'&&t.files[0]){S.sub.file=t.files[0].name;S.sub.prog=0;refreshSheet();clearInterval(A._pi);A._pi=setInterval(()=>{S.sub.prog=Math.min(100,S.sub.prog+10);const b=$('#fprog');b&&(b.style.width=S.sub.prog+'%');if(S.sub.prog>=100){clearInterval(A._pi);updateSub()}},120)}});
 document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.phone!=null){const v=t.value.replace(/[^\d+ ]/g,'').slice(0,16);t.value=v;phSet(v);toast('check','Phone saved');if(curSheet&&curSheet.name==='profile'){S.pf&&afterInput('pf');if(V.acct&&V.acct.dept&&V.acct.adm&&phOK())refreshSheet()}refreshAll()}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='chatin')A.sendChat({k:$('#chatsend').dataset.k});if(e.key==='Enter'&&e.target.id==='postin')A.sendPost();if(e.key==='Enter'&&curSheet&&(curSheet.name==='auth'||curSheet.name==='addMember')){const b=$('#aubtn')||$('#mmbtn');b&&!b.classList.contains('dis')&&b.click()}});
-document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||el.classList.contains('dis'))return;if(V.role==='a'&&!V.org&&roEv()&&(OWN_MUT.has(el.dataset.act)||(el.dataset.act==='sheet'&&el.dataset.n==='post')||(el.dataset.act==='push'&&el.dataset.n==='close'))){toast('lock','View only · created by '+ownerName(S.event));return}if(V.org&&!['alertK','signOut','closeSheet','back'].includes(el.dataset.act)&&!orgGate(el.dataset.act))return;const f=A[el.dataset.act];f&&f(el.dataset,el)});
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||el.classList.contains('dis'))return;if(V.role==='a'&&!V.org&&roEv()&&(OWN_MUT.has(el.dataset.act)||(el.dataset.act==='sheet'&&el.dataset.n==='post')||(el.dataset.act==='push'&&['close','access','orgs'].includes(el.dataset.n))||el.dataset.act==='ownLock')){toast('lock',el.dataset.act==='ownLock'||el.dataset.n==='access'||el.dataset.n==='orgs'?'Only '+ownerName(S.event)+' can manage organizers':'View only · created by '+ownerName(S.event));return}if(V.org&&!['alertK','signOut','closeSheet','back'].includes(el.dataset.act)&&!orgGate(el.dataset.act))return;const f=A[el.dataset.act];f&&f(el.dataset,el)});
 function icsDownload(){const L=S.stages.filter((s,i)=>S.calSel[i]);const f=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HackOS//EN',...L.flatMap(s=>['BEGIN:VEVENT','UID:'+S.cur+'-'+s.name.replace(/\s/g,'')+'@hackos','DTSTAMP:'+f(Date.now()),'DTSTART:'+f(s.deadline),'DTEND:'+f(s.deadline+36e5),'SUMMARY:'+E().name+' - '+s.name,'END:VEVENT']),'END:VCALENDAR'].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([body],{type:'text/calendar'}));a.download='HackOS.ics';document.body.append(a);a.click();a.remove()}
 Object.assign(A,{
  ddT:(d,b)=>{const e=b.closest('.dd'),was=e.classList.contains('open');$$('.dd.open').forEach(x=>x.classList.remove('open'));if(!was)e.classList.add('open')},
