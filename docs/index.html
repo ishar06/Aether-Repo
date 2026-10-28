@@ -659,6 +659,11 @@ button.chip.acc,.chip.acc[data-act]{background:#fff;color:#04141b}
 .post-me .chip{background:rgba(2,26,34,.16);color:#021a22}.post-me .chip.acc{background:#021a22;color:#fff}
 .post-me .av{background:rgba(2,26,34,.16);color:#021a22}
 .lbtn[data-act=authOpen]{background:var(--ac);color:#021a22;box-shadow:0 8px 22px rgba(0,180,216,.3)}
+
+/* Locked CTA: fully opaque so content scrolling underneath never shows through; reads as unavailable (no shadow, no press, muted label) */
+.btn.locked,.btn.locked.dis{opacity:1!important;pointer-events:none;cursor:not-allowed;background:#1B2226!important;color:#7C8A91!important;box-shadow:inset 0 0 0 1px rgba(202,240,248,.10)!important;font-weight:600}
+.btn.locked:active{transform:none}
+.cta .btn.locked{box-shadow:inset 0 0 0 1px rgba(202,240,248,.10),0 10px 30px rgba(0,0,0,.6)!important}
 </style>
 </head>
 <body>
@@ -1013,7 +1018,7 @@ SC.details=({id})=>{const e=getEv(id),open=canReg(e),regd=!!e.me;
  <div class="card cp row" style="gap:14px">${ic('bank',22,'dim')}<div class="sp"><div class="h2" style="font-size:16px">${esc(e.org)}</div><div class="dim sm">${esc(e.venue)}</div></div></div>
  ${e.email||e.phone?`<div class="sec">${ic('mail',16)}<span>Contact</span></div><div class="card">${e.email?`<a class="lrow tap" href="mailto:${esc(e.email)}" style="color:inherit;text-decoration:none"><div class="li">${ic('mail',22)}</div><div class="sp"><div class="dim xs">Email</div><b>${esc(e.email)}</b></div></a>`:''}${e.phone?`<a class="lrow tap" href="tel:${esc(e.phone)}" style="color:inherit;text-decoration:none"><div class="li">${ic('phone',22)}</div><div class="sp"><div class="dim xs">Phone</div><b>${esc(e.phone)}</b></div></a>`:''}</div>`:''}
  <div style="height:20px"></div></div>`,
- bottom:`<div class="cta">${regd?btn('View My Pass','ticket',`data-act="goEv" data-id="${e.id}"`):open?(!profOK()?btn('Complete Profile to Register','person','data-act="sheet" data-n="profile"','white'):!eligible(e)?btn('Not eligible · Year '+myYear()+' · '+myDept(),'lock','','dis'):btn('Register Team','regadd',`data-act="openReg" data-id="${e.id}"`,'white')):btn(e.closed?'Event Closed':'Registration Closed','lock','','dis')}</div>`}};
+ bottom:`<div class="cta">${regd?btn('View My Pass','ticket',`data-act="goEv" data-id="${e.id}"`):open?(!profOK()?btn('Complete Profile to Register','person','data-act="sheet" data-n="profile"','white'):!eligible(e)?btn('Not eligible · Year '+myYear()+' · '+myDept(),'lock','aria-disabled="true"','locked'):btn('Register Team','regadd',`data-act="openReg" data-id="${e.id}"`,'white')):btn(e.closed?'Event Closed':'Registration Closed','lock','aria-disabled="true"','locked')}</div>`}};
 const PMIN=20;
 const linkOK=f=>{const L=getEv(S.regEv).links||[],o={};if(L.includes('li'))o.li=urlRe.test(f.li.trim())&&/linkedin\./i.test(f.li);if(L.includes('video'))o.video=urlRe.test(f.video.trim());if(L.includes('proto'))o.proto=urlRe.test(f.proto.trim());return o};
 const regOK=()=>{const f=S.form;return{name:f.name.trim().length>=2,roll:f.roll.trim().length>=3,dept:!!f.dept,problem:f.problem.trim().length>=PMIN,...linkOK(f),mem:f.mem.length>=getEv(S.regEv).min-1}};
@@ -1221,7 +1226,7 @@ SC.orgs=()=>{const e=S.event,a=e.access,M=a.members,act=M.filter(m=>!m.revoked).
 SC.close=()=>{const e=S.event,T=S.teams.length,ar=S.teams.filter(t=>t.arrived).length,el=S.teams.filter(t=>t.elim).length;
  return {tabs:0,bar:bar({back:1,title:'Close Event'}),body:`<div class="col c" style="align-items:center;gap:22px;padding:10px 0 30px">${e.closed?`<div>${okmark(130)}</div>`:ring(progress(),150,12,`<span style="color:var(--ac)">${ic('archive',58)}</span>`)}<div class="h1">${esc(e.name)}</div></div>
  <div class="card cp row" style="justify-content:space-around;padding:24px 12px">${kpi('regadd',T,T,'Registered')}${kpi('arrived',ar,Math.max(T,1),'Arrived')}${kpi('xmark',el,Math.max(T,1),'Eliminated')}</div>`,
- bottom:`<div class="cta">${e.closed?btn('Event Closed','lock','','dis'):btn('Close Event','archive','data-act="closeEvent" style="background:var(--red);color:#fff"')}</div>`}};
+ bottom:`<div class="cta">${e.closed?btn('Event Closed','lock','aria-disabled="true"','locked'):btn('Close Event','archive','data-act="closeEvent" style="background:var(--red);color:#fff"')}</div>`}};
 SC.create=()=>{if(S.draftFor!==S.cur){S.draft=pickEF(S.event);S.draftFor=S.cur}const d=S.draft,toggle=(k,v,on,i)=>`<span class="chip lg ${on?'sel':''}" data-act="togDraft" data-k="${k}" data-v="${v}">${i?ic(i,16):''}${esc(v)}</span>`;
  const dl=[['reg','regadd'],['start','play'],['submit','upload']].map(([k,i])=>`<label class="fld" style="margin-bottom:12px"><span class="fi">${ic(i,20)}</span><input type="datetime-local" data-date="${k}" value="${toLocal(d.deadlines[k])}"></label>`).join('');
  const stepper=(k,v)=>`<div class="stp"><button class="step" data-act="step" data-k="${k}" data-d="-1">${ic('minus',16)}</button><b class="mono">${v}</b><button class="step" data-act="step" data-k="${k}" data-d="1">${ic('plus',16)}</button></div>`;
@@ -1244,7 +1249,7 @@ SC.create=()=>{if(S.draftFor!==S.cur){S.draft=pickEF(S.event);S.draftFor=S.cur}c
  ${V.org?locked:''}
  ${V.org?'':acc('c-sz','people','Team Size',d.min+'–'+d.max,`<div class="row" style="padding-top:4px"><span class="dim">${ic('person',22)}</span>${stepper('min',d.min)}<span class="sp"></span><span class="dim">${ic('people',22)}</span>${stepper('max',d.max)}</div>`)}
  <div class="card"><div class="lrow tap" data-act="push" data-n="stages"><div class="li">${ic('layers',22)}</div><b class="sp">Stage Builder</b><span class="nb">${S.stages.length}</span>${ic('chr',18,'dim')}</div>${V.org?'':ownsEv(S.event)?`<div class="lrow tap" data-act="push" data-n="orgs"><div class="li">${ic('people',22)}</div><b class="sp">Manage Organizers</b><span class="nb">${S.event.access.members.length}</span>${ic('chr',18,'dim')}</div>`:lockRow('Manage Organizers')}</div></div><div style="height:30px"></div>`,
- bottom:`<div class="cta" style="bottom:104px">${V.org&&!pubd?btn('Not published yet','lock','','dis'):btn(pubd?'Update Event':'Publish Event',pubd?'check':'publish','id="pubbtn" data-act="publish"','white')}</div>`}};
+ bottom:`<div class="cta" style="bottom:104px">${V.org&&!pubd?btn('Not published yet','lock','aria-disabled="true"','locked'):btn(pubd?'Update Event':'Publish Event',pubd?'check':'publish','id="pubbtn" data-act="publish"','white')}</div>`}};
 SH.editEvent=()=>({tall:1,html:'<div id="eov"></div>',mount:box=>{if(V.ov)return;V.ov='edit';V.panes.edit=$('#eov',box);const el=mk('create');V.stacks.edit=[el];V.panes.edit.append(el)}});
 const ND_STEPS=['Basics','Schedule & Teams','Tracks, Prizes & Fee','Links, Rules & Contact'];
 const ordn=n=>{const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
