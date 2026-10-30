@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="screen-orientation" content="landscape">
-<title>HackOS · iPad</title>
+<title>Orbit · iPad</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 i,em{font-style:normal}
@@ -222,7 +222,7 @@ mark{background:rgba(0,180,216,.3);color:inherit;border-radius:3px;padding:0 1px
 .spin{animation:spin .8s linear infinite}
 .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .55s .15s ease-out forwards}
 .fadein{animation:fade .35s}
-.land{isolation:isolate}.land .rain{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 78%,transparent 100%)}
+.land{isolation:isolate}.land .rain{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 78%,transparent 100%)}@keyframes twk{0%,100%{opacity:.75}50%{opacity:1}}.land .rain.stars{animation:twk 7s ease-in-out infinite;will-change:opacity}@media (prefers-reduced-motion:reduce){.land .rain.stars{animation:none}}
 .up{animation:slideup .45s cubic-bezier(.2,.9,.3,1) both}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes spinslow{to{transform:translate(-50%,-50%) rotate(360deg)}}
@@ -1014,7 +1014,7 @@ function syncSplit(){if(!V.role)return;Object.entries(V.panes).forEach(([k,p])=>
  $$('[data-act]',r).forEach(x=>{const a=x.dataset.act,n=a==='push'?x.dataset.n:({openEvent:'details',aOpen:'aevent',hOpen:'helpthread',msgTeam:'helpthread'})[a];if(n&&n===d._n&&(x.dataset.id==null||String(x.dataset.id)===String(d._p.id)))x.classList.add('selrow')})})}
 document.addEventListener('click',e=>{V.src=e.target.closest&&e.target.closest('.screen')||null;if(e.target.closest&&e.target.closest('#sbtn')){V.rail=!V.rail;$('#app').classList.toggle('rail',V.rail)}},true);
 function startRole(role){$('#homebar').style.display='';V.role=role;V.tabs=TABS[role];V.stacks={};V.panes={};const app=$('#app');app.innerHTML='';app.className=V.rail?'rail':'';S.cur=role==='p'?(myEvs()[0]||S.evs[0]).id:S.cur;S.picked=false;S.draftFor=null;S.sdraftFor=null;
- app.insertAdjacentHTML('beforeend',`<aside id="side" class="glass"><div class="sh">${logo(30)}<b>HackOS</b><button class="sbtn" id="sbtn" aria-label="Toggle sidebar">${ic('sidebar',22)}</button></div><div class="sl">${sideRole()}</div><nav id="tabs">${V.tabs.map(([k,i,l])=>`<button class="tab" data-act="tab" data-t="${k}">${tic(i,20)}<span>${l}</span></button>`).join('')}</nav><div class="sf"><button class="acct" data-act="sheet" data-n="profile">${sideAcct()}</button></div></aside><div id="main"></div>`);
+ app.insertAdjacentHTML('beforeend',`<aside id="side" class="glass"><div class="sh">${logo(30)}<b>Orbit</b><button class="sbtn" id="sbtn" aria-label="Toggle sidebar">${ic('sidebar',22)}</button></div><div class="sl">${sideRole()}</div><nav id="tabs">${V.tabs.map(([k,i,l])=>`<button class="tab" data-act="tab" data-t="${k}">${tic(i,20)}<span>${l}</span></button>`).join('')}</nav><div class="sf"><button class="acct" data-act="sheet" data-n="profile">${sideAcct()}</button></div></aside><div id="main"></div>`);
  const main=$('#main');
  V.tabs.forEach(([k,,, root])=>{const p=document.createElement('div'),c=splitCfg(k);p.className='pane'+(c?' split':'');p.dataset.t=k;if(c)p.innerHTML=`<div class="col1"></div><div class="col2"><section class="nosel">${ic(c[0],56)}<b>${c[1]}</b><span>${c[2]}</span></section></div>`;main.append(p);V.panes[k]=p;const el=mk(root);V.stacks[k]=[el];host(k,0).append(el)});
  V.tab=null;switchTab(V.tabs[0][0]);app.style.animation='fade .5s';
@@ -1121,7 +1121,7 @@ const flBox=(k,src,card)=>{const f=flS(k),P=flPills(f);
  ${k==='sw'?'':`<div class="fcaps">${STAT_OPTS.map(([v,l])=>`<span class="chip ${f.status.includes(v)?'sel':''}" role="button" aria-pressed="${f.status.includes(v)}" data-act="fltSt" data-k="${k}" data-v="${v}">${l}</span>`).join('')}</div>`}
  ${k==='ev'?`<div class="card cp row" style="margin:2px 0 14px;padding:12px 18px"><span class="li" style="width:40px;height:40px;border-radius:14px">${ic('cap',20)}</span><b class="sp">Eligible for me</b>${sw(f.me,'fltMe')}</div>`:''}
  <div id="fll-${k}">${flList(k,src,card)}</div>`};
-const FV={sw:[()=>evScope(),e=>swRow(e)],ev:[()=>S.evs.filter(e=>e.published).sort((a,b)=>(a.closed?1:0)-(b.closed?1:0)||b.id-a.id),e=>evCard(e)],ah:[()=>S.evs,e=>aEvCard(e)],oh:[()=>orgEvs(),e=>aEvCard(e)]};
+const FV={sw:[()=>evScope(),e=>swRow(e)],ev:[()=>S.evs.filter(e=>e.published).sort((a,b)=>b.id-a.id),e=>evCard(e)],ah:[()=>S.evs.slice().sort((a,b)=>b.id-a.id),e=>aEvCard(e)],oh:[()=>orgEvs().sort((a,b)=>b.id-a.id),e=>aEvCard(e)]};
 function flPaint(k){const L=$('#fll-'+k);if(L)L.innerHTML=k==='sw'?swList():flList(k,FV[k][0],FV[k][1]);const x=$('#sx-'+k);x&&(x.style.display=flS(k).q?'':'none')}
 function fsCount(){const d=S.fd;if(!d)return;const n=FV[d.k][0]().filter(e=>flMatch(e,d,d.k)).length,l=$('#fsbtn span');l&&(l.textContent=n?'Show '+n+(n==1?' Event':' Events'):'No Events');const b=$('#fsbtn');b&&b.classList.toggle('dis',!n)}
 function fsPrize(){const d=S.fd,b=pb(),r=b.hi-b.lo,a=(d.pmin-b.lo)/r,z=(d.pmax-b.lo)/r,f=$('#fs-fill');if(!f)return;
@@ -1539,7 +1539,7 @@ SH.auth=()=>{const a=S.au,f=a.f,st=a.step,up=a.mode==='up';
  const RI=AU_INFO[a.role],pwf=`<label class="fld"><span class="fi">${ic('key',20)}</span><input data-bind="au.pw" type="password" placeholder="Password" value="${esc(f.pw)}" autocomplete="${up?'new-password':'current-password'}"><span class="fi tap" data-act="auPw" style="cursor:pointer">${ic('eye',20)}</span></label>`;
  if(st==='start')h=head(RI[0],'Sign In','Sign in as '+({p:'a Participant',o:'an Organizer',a:'an Admin'})[a.role])+modes+fl('mail','email','Institute or personal email',{t:'email'})+pwf+err+cta('Sign In')+`<div class="dim xs" style="text-align:center;margin:0 6px 4px">Demo · <span class="tap" data-act="auDemoIn" style="color:var(--ac);font-weight:600">${AU_DEMO[a.role]} · ${AU_DEMOPW}</span></div>`;
  else if(st==='profile')h=head(RI[0],'Create Account',RI[1],RI[2])+modes+(a.apple?`<div class="row" style="margin:0 4px 14px">${chip('apple','Signing up with Apple','dim')}</div>`:'')+fl('person','name','Full name')
-  +(a.role==='a'?fl('bank','code','Institute code',{x:'inputmode="numeric" maxlength="5"',ok:!!INST[f.code.trim()]})+`<div id="auinst">${INST[f.code.trim()]?chip('bank',INST[f.code.trim()].name,'acc'):''}</div><div class="dim xs" style="margin:-6px 6px 14px">The code HackOS gave your institute. Demo: 80002</div>`:fl('idcard','roll','Roll number',{ok:f.roll.trim().length>=3}))
+  +(a.role==='a'?fl('bank','code','Institute code',{x:'inputmode="numeric" maxlength="5"',ok:!!INST[f.code.trim()]})+`<div id="auinst">${INST[f.code.trim()]?chip('bank',INST[f.code.trim()].name,'acc'):''}</div><div class="dim xs" style="margin:-6px 6px 14px">The code Orbit gave your institute. Demo: 80002</div>`:fl('idcard','roll','Roll number',{ok:f.roll.trim().length>=3}))
   +fl('bank','ie','Institute email',{t:'email'})+fl('mail','pe','Personal email',{t:'email',x:a.apple?'readonly':''})+(a.apple?'<div class="dim xs" style="margin:-6px 6px 14px">Linked to your Apple Account. Sign in with Apple or either email.</div>':'<div class="dim xs" style="margin:-6px 6px 14px">Use either email with one password. An iCloud address works with Sign in with Apple.</div>')+pwf+`<div id="aupw" class="xs" style="color:var(--red);margin:-6px 6px 14px;${pwErr(f.pw)?'':'display:none'}">${pwErr(f.pw)}</div>`+err+cta('Continue');
  else if(st==='otp'){const v=a.otp.val||'',left=a.otp.tries,s=Math.ceil((a.otp.until-Date.now())/1000);
   h=head('lock','Verify Email','Enter the 4-digit code sent to '+esc(a.otpTo))+`<div class="otp" id="auotp">${[0,1,2,3].map(i=>`<i class="${v.length===i?'on':''}">${v[i]||''}</i>`).join('')}<input data-otp="1" inputmode="numeric" maxlength="4" autocomplete="one-time-code" ${left<=0?'disabled':''}></div>`+err
@@ -1642,18 +1642,18 @@ SH.qr=()=>{const sc=S.scan,L=S.teams.filter(t=>t.short),ar=L.filter(t=>t.arrived
  <div style="position:absolute;left:calc(50% - 360px);width:720px;bottom:34px;z-index:3"><div class="card glass" style="padding:14px;margin:0">${L.length?`<div class="tray">${L.map(x=>`<div class="pcard tap ${x.arrived?'done':''}" data-act="scanT" data-id="${x.id}">${x.arrived?`<span class="ck">${ic('check',16)}</span>`:''}<div style="border-radius:8px;overflow:hidden">${qrSvg(qrPay(x),52)}</div><span>${esc(x.name.split(' ')[0])}</span></div>`).join('')}</div>`:`<div class="col c" style="align-items:center;padding:20px 0;color:var(--fg2);gap:10px">${ic('lock',34)}<span class="sm">Finalize shortlist first</span></div>`}</div></div>`}};
 /* ---------- auth: sign in / sign up (dummy data, 4-digit OTP shown as a Mail banner) ---------- */
 const DB={accts:[
- {id:1,role:'p',pw:'HackOS@2026',name:'Riya Sharma',roll:'21CS014',dept:'CSE',adm:2024,phone:ST[0].phone,ie:'riya.sharma@campus.edu',pe:'riya.sharma@icloud.com',apple:'riya'},
- {id:2,role:'a',pw:'HackOS@2026',name:'Arjun Nair',phone:ADM.phone,ie:'arjun.nair@campus.edu',pe:'arjun.nair@icloud.com',code:'80002',apple:'arjun'},
+ {id:1,role:'p',pw:'Orbit@2026',name:'Riya Sharma',roll:'21CS014',dept:'CSE',adm:2024,phone:ST[0].phone,ie:'riya.sharma@campus.edu',pe:'riya.sharma@icloud.com',apple:'riya'},
+ {id:2,role:'a',pw:'Orbit@2026',name:'Arjun Nair',phone:ADM.phone,ie:'arjun.nair@campus.edu',pe:'arjun.nair@icloud.com',code:'80002',apple:'arjun'},
  {id:6,role:'a',pw:'Ishardeep@06',name:'Ishar',phone:'',ie:'ishardeep@chitkara.edu.in',pe:'ishardeep@gmail.com',code:'80002'},
- {id:5,role:'a',pw:'HackOS@2026',name:'Meera Iyer',phone:'+91 98765 77120',ie:'meera.iyer@campus.edu',pe:'meera.iyer@icloud.com',code:'80002',apple:'meera'},
- {id:3,role:'o',pw:'HackOS@2026',name:'Divya Kapoor',roll:'21CS030',dept:'CSE',adm:2023,phone:'+91 98110 22331',ie:'divya.k@campus.edu',pe:'divya.kapoor@gmail.com',apple:'divya',events:[0,1]},
- {id:4,role:'o',pw:'HackOS@2026',name:'Kiran Mehra',roll:'21IT011',dept:'IT',adm:2024,phone:'+91 98110 44552',ie:'kiran.m@campus.edu',pe:'kiran.mehra@gmail.com',apple:'kiran',events:[0]}]};
+ {id:5,role:'a',pw:'Orbit@2026',name:'Meera Iyer',phone:'+91 98765 77120',ie:'meera.iyer@campus.edu',pe:'meera.iyer@icloud.com',code:'80002',apple:'meera'},
+ {id:3,role:'o',pw:'Orbit@2026',name:'Divya Kapoor',roll:'21CS030',dept:'CSE',adm:2023,phone:'+91 98110 22331',ie:'divya.k@campus.edu',pe:'divya.kapoor@gmail.com',apple:'divya',events:[0,1]},
+ {id:4,role:'o',pw:'Orbit@2026',name:'Kiran Mehra',roll:'21IT011',dept:'IT',adm:2024,phone:'+91 98110 44552',ie:'kiran.m@campus.edu',pe:'kiran.mehra@gmail.com',apple:'kiran',events:[0]}]};
 const ROLE_L={p:'Participant',o:'Organizer',a:'Admin'};
 const mailRe=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const nrm=s=>String(s||'').trim().toLowerCase();
 const pwErr=p=>!p?'':p.length<8?'Length should at least be 8 characters.':!/[A-Z]/.test(p)?'Add at least one uppercase letter.':!/[a-z]/.test(p)?'Add at least one lowercase letter.':!/\d/.test(p)?'Add at least one number.':!/[^A-Za-z0-9\s]/.test(p)?'Add at least one special symbol.':'';
 const AU_INFO={p:['cap','Are you a student looking to take part in events?','Join hackathons, build teams and submit your projects.'],o:['orgrole','Has your Admin asked you to help run an event?','Check in teams, share updates and keep the event on track.'],a:['adminrole','Do you create and manage events for your institute?','Set up events, assign organizers and oversee every result.']};
-const AU_DEMO={p:'riya.sharma@campus.edu',o:'divya.k@campus.edu',a:'arjun.nair@campus.edu'},AU_DEMOPW='HackOS@2026';
+const AU_DEMO={p:'riya.sharma@campus.edu',o:'divya.k@campus.edu',a:'arjun.nair@campus.edu'},AU_DEMOPW='Orbit@2026';
 const findAcct=em=>{em=nrm(em);return em&&DB.accts.find(a=>nrm(a.ie)===em||nrm(a.pe)===em)};
 const APPLE_IDS=[{n:'Riya Sharma',e:'riya',m:'riya.sharma@icloud.com',l:'Participant',old:1},{n:'Arjun Nair',e:'arjun',m:'arjun.nair@icloud.com',l:'Admin',old:1},{n:'Kabir Singh',e:'kabir',m:'kabir.singh@icloud.com',l:''},{n:'Meera Iyer',e:'meera',m:'meera.iyer@icloud.com',l:'Admin',old:1}];
 const adminInst=()=>V.acct&&V.acct.code||'80002';
@@ -1686,7 +1686,7 @@ function auInput(){const a=S.au,f=a.f,el=document.activeElement;if(el&&el.datase
  if(a.step==='profile'&&a.role==='a'){const i=INST[f.code.trim()],o=$('[data-ok="code"]');o&&o.classList.toggle('on',!!i);const n=$('#auinst');n&&(n.innerHTML=i?chip('bank',i.name,'acc'):'')}}
 const auGo=s=>{const a=S.au;a.hist.push(a.step);a.step=s;a.err='';refreshSheet()};
 function auSend(to){const a=S.au,c=String(1000+Math.floor(Math.random()*9000));a.otp={code:c,tries:3,until:Date.now()+3e4,val:''};a.otpTo=to;
- banner({icon:'mail',title:'Your HackOS code is '+c,sub:'Sent to '+to,hold:14000,noLog:1});if(a.step!=='otp'){a.hist.push(a.step);a.step='otp'}a.err='';refreshSheet()}
+ banner({icon:'mail',title:'Your Orbit code is '+c,sub:'Sent to '+to,hold:14000,noLog:1});if(a.step!=='otp'){a.hist.push(a.step);a.step='otp'}a.err='';refreshSheet()}
 function otpIn(t){const a=S.au,v=t.value.replace(/\D/g,'').slice(0,4);t.value=v;a.otp.val=v;$$('#auotp i').forEach((x,i)=>{x.textContent=v[i]||'';x.classList.toggle('on',i===v.length)});if(v.length===4)setTimeout(auVerify,180)}
 function auVerify(){const a=S.au,o=a&&a.otp;if(!a||a.step!=='otp'||o.tries<=0||o.val.length<4)return;
  if(o.val===o.code){a.err='';return a.purpose==='in'?auFinishIn():auCreate()}
@@ -1797,31 +1797,45 @@ Object.assign(A,{
   if(p&&p.st==='declined')go();else ask({icon:'xmark',title:(p?'Cancel invite for ':'Remove ')+nm+'?',danger:1,ok:p?'Cancel invite':'Remove'},go)}
 });
 /* ---------- landing ---------- */
-const logo=(z=120)=>`<span style="display:inline-flex;color:#00B4D8">${ic('logo',z)}</span>`;
-/* landing: slow binary rain. Each column has a head drifting down; every cell it passes shows a 0/1 that eases in, then eases out. */
+/* Orbit mark: sun with three tilted orbits and one planet each. Only the planets move; no filters, so it stays smooth. Static under prefers-reduced-motion. */
+let _lgN=0;
+const logo=(z=120)=>{const id='og'+(++_lgN),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const ob=(rx,ry,rot,col,sw,op,r,fill,dur,rev)=>{const d=`M${rx},0A${rx},${ry} 0 1 1 ${-rx},0A${rx},${ry} 0 1 1 ${rx},0`,x=rev?-rx:rx,m=`<animateMotion dur="${dur}s" repeatCount="indefinite" keyPoints="${rev?'1;0':'0;1'}" keyTimes="0;1" calcMode="linear" path="${d}"/>`;
+  return {line:`<ellipse rx="${rx}" ry="${ry}" transform="translate(60 60) rotate(${rot})" fill="none" stroke="${col}" stroke-width="${sw}" opacity="${op}"/>`,
+   pl:`<g transform="translate(60 60) rotate(${rot})"><circle r="${r}" fill="${fill}"${calm?` cx="${x}"`:''}>${calm?'':m}</circle></g>`}};
+ const A=ob(54,20,-24,'#00B4D8',1.6,.8,4.6,'#90E0EF',14),B=ob(40,14,32,'#CAF0F8',1.3,.5,3.4,'#fff',9,1),C=ob(27,9.5,-70,'#10B981',1.3,.6,2.8,'#34D399',6);
+ return `<span style="display:inline-flex;color:#00B4D8"><svg class="ic orbit-logo" width="${z}" height="${z}" viewBox="0 0 120 120" role="img" aria-label="Orbit" style="overflow:visible"><defs>
+<radialGradient id="${id}s" cx="38%" cy="34%" r="72%"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#CAF0F8"/><stop offset=".85" stop-color="#00B4D8"/><stop offset="1" stop-color="#0089a8"/></radialGradient>
+<radialGradient id="${id}h"><stop offset="0" stop-color="#00B4D8" stop-opacity=".4"/><stop offset=".6" stop-color="#00B4D8" stop-opacity=".1"/><stop offset="1" stop-color="#00B4D8" stop-opacity="0"/></radialGradient></defs>
+<circle cx="60" cy="60" r="58" fill="url(#${id}h)"/>${A.line}${A.pl}<circle cx="60" cy="60" r="13" fill="url(#${id}s)"/>${B.line}${C.line}${B.pl}${C.pl}</svg></span>`};
+/* landing: quiet starfield. Stars are painted once on a static canvas (a slow CSS fade gives the twinkle); a second canvas draws the occasional dim shooting star from the top-right toward the bottom-left, and idles when none is in flight. */
 function binRain(land){
- if(!land||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
- const cv=document.createElement('canvas');cv.className='rain';land.prepend(cv);
- const g=cv.getContext('2d'),CW=24,CH=26,MAXA=.34,ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
- let W=0,H=0,cols=[],last=performance.now();
- const size=()=>{const r=land.getBoundingClientRect(),k=devicePixelRatio||1,s=land.offsetWidth?r.width/land.offsetWidth:1;W=land.offsetWidth;H=land.offsetHeight;cv.width=W*k;cv.height=H*k;g.setTransform(k,0,0,k,0,0);
-  const n=Math.ceil(W/CW);cols=Array.from({length:n},(_,i)=>cols[i]||{head:Math.random()*H*.5-120,v:30+Math.random()*40,cells:{}})};
- size();
- const tick=now=>{
-  if(!cv.isConnected)return;
+ if(!land)return;
+ const calm=matchMedia('(prefers-reduced-motion:reduce)').matches,mk=c=>{const v=document.createElement('canvas');v.className='rain '+c;land.prepend(v);return v},
+  sc=mk('stars'),cv=mk('shots'),g=cv.getContext('2d'),gs=sc.getContext('2d'),COL=['255,255,255','202,240,248','0,180,216'];
+ let W=0,H=0,shots=[],last=performance.now(),next=last+1500,run=0;
+ const size=()=>{const k=Math.min(devicePixelRatio||1,2);W=land.offsetWidth;H=land.offsetHeight;
+  for(const v of[sc,cv]){v.width=W*k;v.height=H*k}
+  gs.setTransform(k,0,0,k,0,0);g.setTransform(k,0,0,k,0,0);gs.clearRect(0,0,W,H);
+  for(let i=Math.round(W*H/6500);i--;){gs.globalAlpha=.2+Math.random()*.4;gs.fillStyle=`rgb(${COL[Math.random()<.85?Math.floor(Math.random()*2):2]})`;gs.beginPath();gs.arc(Math.random()*W,Math.random()*H,Math.random()*.9+.3,0,6.283);gs.fill()}};
+ const spawn=now=>{const a=Math.PI*(.74+Math.random()*.06),sp=300+Math.random()*160;
+  shots.push({x:Math.random()<.65?W*(.3+Math.random()*.8):W+20,y:0,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,len:70+Math.random()*60,c:Math.random()<.8?'202,240,248':'0,180,216',age:0});
+  const s=shots[shots.length-1];if(s.x>W)s.y=Math.random()*H*.4;else s.y=-10;next=now+3000+Math.random()*4000};
+ const tick=now=>{if(!cv.isConnected){run=0;return}
   if(land.offsetWidth!==W||land.offsetHeight!==H)size();
   const dt=Math.min(.05,(now-last)/1000);last=now;
-  g.clearRect(0,0,W,H);g.font='500 15px ui-monospace,"SF Mono",Menlo,monospace';g.textAlign='center';g.textBaseline='middle';g.fillStyle='#00B4D8';
-  cols.forEach((c,i)=>{
-   const r0=Math.floor(c.head/CH);c.head+=c.v*dt;const r1=Math.floor(c.head/CH);
-   for(let r=r0+1;r<=r1;r++)if(r>=0&&Math.random()<.7)c.cells[r]={b:Math.random()<.5?'0':'1',t0:now,life:3200+Math.random()*3200};
-   if(c.head>H+CH*4){c.head=-Math.random()*200;c.v=30+Math.random()*40;c.cells={}}
-   for(const r in c.cells){const e=c.cells[r],p=(now-e.t0)/e.life;if(p>=1){delete c.cells[r];continue}
-    const a=MAXA*ease(p<.3?p/.3:1-(p-.3)/.7);g.globalAlpha=a;g.fillText(e.b,i*CW+CW/2,r*CH+CH/2)}
-  });
-  g.globalAlpha=1;requestAnimationFrame(tick)};
- requestAnimationFrame(tick)}
-function showSignIn(){$('#homebar').style.display='none';V.role=null;V.tab=null;V.org=null;V.acct=null;S.au=null;stopCam();$('#banners').innerHTML='';const app=$('#app');app.className='';app.innerHTML=`<div class="land"><div class="lstack up"><div class="lhero">${logo(112)}<div class="lname">HackOS</div><div class="ltag">Operating System for your Hackathon.</div></div>
+  if(now>=next&&!shots.length)spawn(now);
+  g.clearRect(0,0,W,H);
+  shots=shots.filter(s=>{s.age+=dt;s.x+=s.vx*dt;s.y+=s.vy*dt;
+   const m=Math.hypot(s.vx,s.vy),tx=s.x-s.vx/m*s.len,ty=s.y-s.vy/m*s.len,f=Math.min(1,s.age/.4)*.45,gr=g.createLinearGradient(s.x,s.y,tx,ty);
+   gr.addColorStop(0,`rgba(${s.c},${f})`);gr.addColorStop(1,`rgba(${s.c},0)`);
+   g.strokeStyle=gr;g.lineWidth=1.1;g.lineCap='round';g.beginPath();g.moveTo(s.x,s.y);g.lineTo(tx,ty);g.stroke();
+   return s.x>-s.len-20&&s.y<H+s.len+20});
+  if(!shots.length)g.clearRect(0,0,W,H);
+  requestAnimationFrame(tick)};
+ size();
+ if(!calm)requestAnimationFrame(tick)}
+function showSignIn(){$('#homebar').style.display='none';V.role=null;V.tab=null;V.org=null;V.acct=null;S.au=null;stopCam();$('#banners').innerHTML='';const app=$('#app');app.className='';app.innerHTML=`<div class="land"><div class="lstack up"><div class="lhero">${logo(188)}<div class="lname">Orbit</div><div class="ltag">Discover. Build. Repeat. Compete.</div></div>
  <div class="grp"><div class="lbtn" data-act="authOpen" data-r="p">${ic('cap',26)}<span>Join as Participant</span></div><div class="lbtn" data-act="authOpen" data-r="o">${ic('orgrole',26)}<span>Continue as Organizer</span></div><div class="lbtn" data-act="authOpen" data-r="a">${ic('adminrole',26)}<span>Continue as Admin</span></div><div class="lor"><i></i><span>or</span><i></i></div><div class="lbtn pale" data-act="sheet" data-n="apple">${ic('apple',26)}<span>Sign in with Apple</span></div></div></div></div>`;$('#sheets').classList.remove('on');binRain($('.land'))}
 /* ---------- actions ---------- */
 function afterInput(o){if(o==='pf'){const x=$('#pfprev');x&&(x.textContent=abbr(S.pf.custom)||'—');const b=$('#pfsave');b&&b.classList.toggle('dis',!pfOK())}if(o==='au')auInput();if(o==='mm'){const b=$('#mmbtn');b&&b.classList.toggle('dis',!mmOK());const r=$('#mmerr');r&&(r.style.display=mmElig()?'none':'')}if(o==='form')updateReg();if(o==='sub')updateSub();if(o==='ann'){const d=S.annDraft,b=$('#annbtn'),c=$('#anncnt');c&&(c.textContent=d.body.length+'/160');b&&b.classList.toggle('dis',!(d.type&&d.title.trim()&&d.body.trim()))}}
@@ -1841,7 +1855,7 @@ document.addEventListener('change',e=>{const t=e.target;if(t.dataset.date){const
 document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.phone!=null){const v=t.value.replace(/[^\d+ ]/g,'').slice(0,16);t.value=v;phSet(v);toast('check','Phone saved');if(curSheet&&curSheet.name==='profile'){S.pf&&afterInput('pf');if(V.acct&&V.acct.dept&&V.acct.adm&&phOK())refreshSheet()}refreshAll()}});
 document.addEventListener('keydown',e=>{const rb=e.target.closest&&e.target.closest('[role=button][tabindex]');if(rb&&(e.key==='Enter'||e.key===' ')){e.preventDefault();rb.click()}if(e.key==='Enter'&&e.target.id==='chatin')A.sendChat({k:$('#chatsend').dataset.k});if(e.key==='Enter'&&e.target.id==='postin')A.sendPost();if(e.key==='Enter'&&curSheet&&(curSheet.name==='auth'||curSheet.name==='addMember')){const b=$('#aubtn')||$('#mmbtn');b&&!b.classList.contains('dis')&&b.click()}});
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||el.classList.contains('dis'))return;if(V.role==='a'&&!V.org&&roEv()&&(OWN_MUT.has(el.dataset.act)||(el.dataset.act==='sheet'&&el.dataset.n==='post')||(el.dataset.act==='push'&&['close','access','orgs'].includes(el.dataset.n))||el.dataset.act==='ownLock')){toast('lock',el.dataset.act==='ownLock'||el.dataset.n==='access'||el.dataset.n==='orgs'?'Only '+ownerName(S.event)+' can manage organizers':'View only · created by '+ownerName(S.event));return}if(V.org&&!['alertK','signOut','closeSheet','back'].includes(el.dataset.act)&&!orgGate(el.dataset.act))return;const f=A[el.dataset.act];f&&f(el.dataset,el)});
-function icsDownload(){const L=S.stages.filter((s,i)=>S.calSel[i]);const f=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HackOS//EN',...L.flatMap(s=>['BEGIN:VEVENT','UID:'+S.cur+'-'+s.name.replace(/\s/g,'')+'@hackos','DTSTAMP:'+f(Date.now()),'DTSTART:'+f(s.deadline),'DTEND:'+f(s.deadline+36e5),'SUMMARY:'+E().name+' - '+s.name,'END:VEVENT']),'END:VCALENDAR'].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([body],{type:'text/calendar'}));a.download='HackOS.ics';document.body.append(a);a.click();a.remove()}
+function icsDownload(){const L=S.stages.filter((s,i)=>S.calSel[i]);const f=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Orbit//EN',...L.flatMap(s=>['BEGIN:VEVENT','UID:'+S.cur+'-'+s.name.replace(/\s/g,'')+'@orbit','DTSTAMP:'+f(Date.now()),'DTSTART:'+f(s.deadline),'DTEND:'+f(s.deadline+36e5),'SUMMARY:'+E().name+' - '+s.name,'END:VEVENT']),'END:VCALENDAR'].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([body],{type:'text/calendar'}));a.download='Orbit.ics';document.body.append(a);a.click();a.remove()}
 Object.assign(A,{
  ddT:(d,b)=>{const e=b.closest('.dd'),was=e.classList.contains('open');$$('.dd.open').forEach(x=>x.classList.remove('open'));if(!was)e.classList.add('open')},
  accT:d=>{const e=$('#acc-'+d.k);e.classList.toggle('open');S.open[d.k]=e.classList.contains('open')},
