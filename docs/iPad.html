@@ -77,6 +77,7 @@ input::placeholder,textarea::placeholder{color:var(--fg3)}
 .btn{position:relative}
 .fab{position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:50%;background:var(--em);color:#021a22;display:grid;place-items:center;z-index:20;box-shadow:0 10px 28px rgba(16,185,129,.45),0 2px 6px rgba(0,0,0,.5);transition:transform .15s}
 .fab:active{transform:scale(.92)}
+.fab{width:auto;height:50px;padding:0 22px 0 18px;border-radius:25px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:17px;letter-spacing:-.2px;white-space:nowrap}
 mark{background:rgba(0,180,216,.3);color:inherit;border-radius:3px;padding:0 1px}
 .flash{animation:flash 2.2s ease-out}@keyframes flash{0%,55%{outline:3px solid var(--ac);outline-offset:3px}100%{outline:3px solid transparent;outline-offset:3px}}
 .cta{position:absolute;left:20px;right:20px;bottom:30px;z-index:20}
@@ -791,11 +792,28 @@ button.chip.acc,.chip.acc[data-act]{background:#fff;color:#04141b}
 .post-me .av{background:rgba(2,26,34,.16);color:#021a22}
 .pane:not(.split) .screen:is([data-n=pass],[data-n=space]) .bd:has(.pick){display:block!important;columns:auto!important;column-count:auto!important;max-width:760px;margin:0 auto}
 .lbtn[data-act=authOpen]{background:var(--ac);color:#021a22;box-shadow:0 8px 22px rgba(0,180,216,.3)}
+.lbtn[data-n=roles]{background:var(--ac);color:#021a22;box-shadow:0 8px 22px rgba(0,180,216,.3)}
+.lbtn.pale{background:#fff;color:#000;box-shadow:none;gap:6px;font-weight:600;font-size:19px;letter-spacing:-.2px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
+.lbtn.pale .ic{position:static;margin-top:-2px;margin-right:2px}
 
 /* Locked CTA: fully opaque so content scrolling underneath never shows through; reads as unavailable (no shadow, no press, muted label) */
 .btn.locked,.btn.locked.dis{opacity:1!important;pointer-events:none;cursor:not-allowed;background:#1B2226!important;color:#7C8A91!important;box-shadow:inset 0 0 0 1px rgba(202,240,248,.10)!important;font-weight:600}
 .btn.locked:active{transform:none}
 .cta .btn.locked{box-shadow:inset 0 0 0 1px rgba(202,240,248,.10),0 10px 30px rgba(0,0,0,.6)!important}
+.fab{background:var(--ac);color:#021a22;border:1px solid rgba(255,255,255,.35);box-shadow:0 10px 28px rgba(0,180,216,.45),0 2px 8px rgba(0,0,0,.6)}
+.pdel{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8);border:1px solid rgba(255,255,255,.35);z-index:2}
+.pdel:active{transform:scale(.9)}
+.chip.go,.chip.lg.go{background:#fff;color:#04141b;cursor:pointer;box-shadow:0 2px 12px rgba(255,255,255,.22);transition:transform .15s,opacity .15s}.chip.go:active{transform:scale(.95);opacity:.85}
+.chip.go .gn{min-width:22px;height:22px;border-radius:11px;background:rgba(4,20,27,.12);display:grid;place-items:center;padding:0 6px;font-size:13px;font-variant-numeric:tabular-nums}
+.sheet .lrow.ev{background:transparent;color:var(--fg);border-bottom-color:var(--line)}
+.sheet .lrow.ev .dim:not(.chip),.sheet .lrow.ev .fi{color:var(--fg2)}
+.sheet .lrow.ev .h1,.sheet .lrow.ev .h2,.sheet .lrow.ev b{color:var(--fg)}
+.sheet .lrow.ev .chip{background:rgba(255,255,255,.14);color:#fff}
+.sheet .lrow.ev .chip.dim{background:rgba(255,255,255,.1);color:var(--fg2)}
+.sheet .lrow.ev .chip.acc{background:rgba(0,180,216,.18);color:#7be3f5}
+.sheet .lrow.ev .chip.pink{background:rgba(244,114,182,.18);color:#f9a8d4}
+.sheet .lrow.ev .chip.em{background:rgba(16,185,129,.2);color:#6ee7b7}
+.sheet .lrow.ev .chip.red{background:rgba(255,59,48,.9);color:#fff}
 </style>
 </head>
 <body>
@@ -989,8 +1007,8 @@ const LNK=[['li','LinkedIn','link','linkedin.com/in/…'],['video','Video','vide
 const pickEF=e=>{const o={};EF.forEach(k=>o[k]=clone(e[k]));return o};
 /* ---------- navigation engine ---------- */
 const V={role:null,tab:null,tabs:[],stacks:{},panes:{}};
-const TABS={p:[['events','calendar','Events','events'],['pass','ticket','My Pass','pass'],['space','map','Event Space','space'],['msgs','bubble','Messages','msgs']],
- a:[['home','house','Home','ahome'],['regs','listp','Registrations','regs'],['live','live','Live','live'],['msgs','bubble','Messages','amsgs']]};
+const TABS={p:[['events','calendar','Events','events'],['space','map','Event Space','space'],['msgs','bubble','Messages','msgs']],
+ a:[['home','house','Home','ahome'],['live','live','Live','live'],['msgs','bubble','Messages','amsgs']]};
 const SC={},SH={},A={};
 const INL=new Set(['create','newev','register','stages','shortlist']);
 function paint(d,n){const cta=INL.has(n)&&d.bottom&&d.bottom.includes('class="cta"');if(cta)return `<div class="scroll"><div class="bd">${d.body}${d.bottom.replace('class="cta"','class="cta cta-in"').replace(/bottom:104px;?/,'')}</div></div><div class="topbar">${d.bar||''}</div>`;return `<div class="scroll"><div class="bd">${d.body}</div></div><div class="topbar">${d.bar||''}</div>${d.bottom||''}`}
@@ -1041,7 +1059,7 @@ let toastT;function toast(i,t){const e=$('#toast');e.innerHTML=ic(i,20)+'<span>'
 const BN={};let bnId=0;
 function banner(n){if(!n.noLog)logNote(n);if(!S.notifOn)return;const id=++bnId;BN[id]=n;const b=document.createElement('div');b.className='bn glass'+(n.red?' red':'');b.dataset.act='bnTap';b.dataset.id=id;b.innerHTML=`<div class="bi">${ic(n.icon,22)}</div><div class="sp"><b>${esc(n.title)}</b>${n.sub?`<span>${esc(n.sub)}</span>`:''}</div><span class="xs dim">now</span>${n.actions?`<div class="row" style="flex:1 1 100%;gap:10px"><button class="chip lg" style="flex:1;justify-content:center;color:var(--red)" data-act="invNo" data-id="${n.actions}">Decline</button><button class="chip lg sel" style="flex:1;justify-content:center" data-act="invYes" data-id="${n.actions}">Accept</button></div>`:''}`;if(n.actions)b.style.flexWrap='wrap';$('#banners').append(b);if(!n.actions)setTimeout(()=>dismissBn(b),n.hold||5600)}
 function dismissBn(b){if(!b.parentNode)return;b.classList.add('out');setTimeout(()=>b.remove(),360)}
-function dest(n){if(!n||!n.dest)return;if(n.ev!=null){S.cur=n.ev;refreshAll()}const d=n.dest;if(d==='pass')switchTab('pass',true);else if(d==='space')switchTab('space',true);else if(d==='ann'){switchTab('msgs',true);push('announcements')}else if(d==='help'){switchTab('msgs',true);push('helpdesk')}else if(d==='result'){switchTab('space',true);push('result')}}
+function dest(n){if(!n||!n.dest)return;if(n.ev!=null){S.cur=n.ev;refreshAll()}const d=n.dest;if(d==='pass'){V.src=null;switchTab('events',true);push('details',{id:S.cur});push('pass')}else if(d==='space')switchTab('space',true);else if(d==='ann'){switchTab('msgs',true);push('announcements')}else if(d==='help'){switchTab('msgs',true);push('helpdesk')}else if(d==='result'){switchTab('space',true);push('result')}}
 const annAll=()=>{const t=V.role==='p'?meT():null;return t&&t.elim?S.ann.filter(a=>a.ts<=t.elim.ts):S.ann};
 function queue(n){if(!E().me)return;{const t=meT();if(t&&t.elim&&!n.elim)return}n.ev=S.cur;n.sub=n.sub||E().name;S.q.push(n)}
 function deliver(){const items=S.q.splice(0);items.forEach((n,i)=>setTimeout(()=>V.role==='p'&&banner(n),1000+i*1800));S.invites.filter(v=>v.st==='pending').forEach((v,k)=>setTimeout(()=>V.role==='p'&&v.st==='pending'&&banner({icon:'people',title:'Team invitation',sub:v.by+' invited you to '+v.team+' · '+getEv(v.ev).name,actions:v.id}),2200+k*500));scheduleReminder(items.length*1800+6000)}
@@ -1149,7 +1167,7 @@ SH.filters=({k})=>{const d=S.fd,b=pb(),grp=(t,ds,body)=>`<div class="dim xs b" s
  ${grp('Prize · 1st place','Drag both handles to set the 1st-place prize range.',row(`<div class="sp col" style="gap:6px;padding:6px 0"><div class="row"><b id="fs-pl" class="sp"></b></div><div class="rng"><div class="trk"></div><div class="fill" id="fs-fill"></div><input type="range" data-fs="pmin" min="${b.lo}" max="${b.hi}" step="5000" value="${d.pmin}"><input type="range" data-fs="pmax" min="${b.lo}" max="${b.hi}" step="5000" value="${d.pmax}"></div><div class="row dim xs"><span class="sp">${money(b.lo)}</span><span>${money(b.hi)}</span></div></div>`))}
  </div><div style="flex:none;padding:12px 24px 34px;border-top:1px solid var(--line)">${btn('Show Events','','id="fsbtn" data-act="fltApply"')}</div></div>`,
  mount:()=>{fsPrize();fsCount()}}};
-SC.events=()=>({tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">Events</div>`+flBox('ev',FV.ev[0],FV.ev[1])});
+SC.events=()=>({tabs:1,bar:bar({right:acctBtn()}),body:flBox('ev',FV.ev[0],FV.ev[1])});
 SC.details=({id})=>{const e=getEv(id),open=canReg(e),regd=!!e.me;
  const podium=[1,0,2].map(i=>{const hh=[104,76,56][i];return `<div class="sp col c" style="align-items:center;justify-content:flex-end;gap:8px"><b>${money(e.prizes[i])}</b><div style="width:100%;height:${hh}px;border-radius:16px 16px 6px 6px;background:${i==0?'var(--pink)':'var(--s3)'};color:${i==0?'#3a0820':'var(--fg)'};${i==0?'box-shadow:0 8px 24px rgba(244,114,182,.4);':''}display:grid;place-items:center;font-weight:700;font-size:22px">${i+1}</div></div>`}).join('');
  const dl=[['reg','regadd','Register'],['start','play','Start'],['submit','upload','Submit']].map(([k,i,l],n,a)=>`<div class="tl ${n==a.length-1?'last':''}"><div class="n done">${ic(i,17)}</div><div class="row" style="padding-top:3px"><b class="sp">${l}</b><span class="dim sm">${fmtD(e.deadlines[k])}</span></div></div>`).join('');
@@ -1184,7 +1202,7 @@ SC.register=({id})=>{const e=getEv(id),f=S.form,o=regOK(),n=Object.values(o).fil
  ${f.mem.length<e.max-1?btn('Add Member','plus','data-act="memAdd"','white'):''}
  <div class="dim sm" style="margin:12px 8px 0">You are the team leader. Each member gets an invite they can accept or decline from their notifications.</div><div style="height:120px"></div>`,
  bottom:`<div class="cta">${btn('Submit Registration','check',`id="regbtn" data-act="submitReg"`,'white '+(n<k?'dis':''))}</div>`}};
-SC.pass=()=>{const t=meT();let body=`<div class="lt">My Pass</div>${evsw()}`;
+SC.pass=()=>{const t=meT();let body=`<div class="lt">My Pass</div><div class="dim sm" style="margin:-8px 6px 16px">${esc(S.event.name)}</div>`;
  if(!t)body+=empty('ticket',btn('Browse Events','calendar','data-act="tab" data-t="events"'));
  else{const i=stageIdx(),nx=S.stages[i];let st,card;
   if(!t.short&&!t.elim&&!S.finalized){st=chip('hourglass','Pending','dim');card=`<div class="col c" style="align-items:center;padding:34px 0;gap:20px">${ring(.35,150,10,`<span class="up" style="color:var(--ac)">${ic('hourglass',56)}</span>`)}<span class="dim sm">Shortlist pending</span></div>`}
@@ -1193,7 +1211,7 @@ SC.pass=()=>{const t=meT();let body=`<div class="lt">My Pass</div>${evsw()}`;
   body+=`<div class="card cp col" style="gap:22px"><div class="row">${av(t.name,52)}<div class="sp"><div class="h2">${esc(t.name)}</div><div class="dim sm">${esc(t.roll)} · ${esc(t.dept)}</div></div></div><div class="row">${st}${t.elim?'':chip('layers',(t.stage+1)+'/'+S.stages.length,'dim')}</div>${card}
   <div class="row" style="border-top:1px dashed var(--line);padding-top:18px;gap:14px">${ic('clock',24,'dim')}<div class="sp"><div class="dim sm">${esc(nx.name)}</div><div class="h2">${fmtD(nx.deadline)}</div></div><div class="chip acc">${cdTxt(nx.deadline)}</div></div></div>
   <div class="card cp"><div class="row" style="margin-bottom:6px">${ic('people',20,'dim')}<b class="sp">Team</b>${teamLocked(S.event,t)?chip('lock','Fixed','dim'):isLeader(t)?`<button class="chip acc" data-act="sheet" data-n="editTeam">${ic('pencil',15)}<span>Edit</span></button>`:''}</div>${memRows(t)}</div>`}
- return {tabs:1,bar:bar({right:acctBtn()}),body}};
+ return {tabs:0,bar:bar({back:1}),body}};
 SC.space=({ro}={})=>{const N=S.stages.length,i=stageIdx(),st=stg(S.stages[i]),cl=S.event.closed,fin=cl||allDone(),p=progress(),t=meT(),pc=Math.round(p*100);
  const ts=fin?Date.now():st.deadline,done=fin?N:i,left=fin?0:N-i-1;
  const tbx=[['d','Days'],['h','Hours'],['m','Min'],['s','Sec']].map(([u,l])=>{const x=parts(ts);return `<div class="cdt u-${u}"><b data-cdp="${u}" data-ts="${ts}">${pad(x[u])}</b><i>${l}</i></div>`}).join('');
@@ -1324,20 +1342,20 @@ document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.a
 /* ---------- admin screens ---------- */
 const kpi=(i,v,tot,lb='')=>`<div class="col c" style="align-items:center;gap:8px;flex:1">${ring(tot?v/tot:0,68,7,`<span class="b mono" style="font-size:18px">${v}</span>`)}<span style="color:var(--fg2)">${ic(i,18)}</span><span class="dim xs" style="font-weight:600;text-align:center">${lb}</span></div>`;
 const act0=()=>S.finalized?S.teams.filter(t=>t.short&&!t.elim):S.teams.filter(t=>!t.flag&&!t.elim);
-const aEvCard=e=>{const [i,t,v]=evStatus(e),own=ownsEv(e);return `<div class="card ev tap" data-act="aOpen" data-id="${e.id}"><div class="poster" style="aspect-ratio:16/8">${postr(e)}<div class="pchips">${e.published?chip(i,t,v):chip('draft','Draft','dim')}</div>${own?`<button class="pbtn" data-act="aEdit" data-id="${e.id}" aria-label="Edit event">${ic('pencil',20)}</button>`:`<span class="pbtn ro" aria-label="View only">${ic('eye',20)}</span>`}<div class="pchips" style="left:auto;right:12px">${chip('people',e.teams.length)}</div></div><div class="cp row"><div class="sp"><div class="h1" style="font-size:20px">${esc(e.name)}</div><div style="margin-top:6px">${chip('pin',e.venue,'dim')}</div>${own?'':'<div class="dim xs" style="margin-top:6px">by '+esc(ownerName(e))+'</div>'}</div>${ic('chr',18,'dim')}</div></div>`};
+const aEvCard=e=>{const [i,t,v]=evStatus(e),own=ownsEv(e);return `<div class="card ev tap" data-act="aOpen" data-id="${e.id}"><div class="poster" style="aspect-ratio:16/8">${postr(e)}<div class="pchips">${e.published?chip(i,t,v):chip('draft','Draft','dim')}${own?'':chip('eye','View only','dim')}</div><div class="pchips" style="left:auto;right:12px">${chip('people',e.teams.length)}</div></div><div class="cp row"><div class="sp"><div class="h1" style="font-size:20px">${esc(e.name)}</div><div style="margin-top:6px">${chip('pin',e.venue,'dim')}</div>${own?'':'<div class="dim xs" style="margin-top:6px">by '+esc(ownerName(e))+'</div>'}</div>${ic('chr',18,'dim')}</div></div>`};
 SC.ahome=()=>V.org?({tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">My Events</div>
  ${flBox('oh',FV.oh[0],FV.oh[1])}
 `}):({tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">All Events</div>
- ${flBox('ah',FV.ah[0],FV.ah[1])}`,bottom:`<div class="fab tap" role="button" aria-label="Create New Event" data-act="ndOpen">${ic('plus',26)}</div>`});
+ ${flBox('ah',FV.ah[0],FV.ah[1])}`,bottom:`<div class="fab tap" role="button" aria-label="Create Event" data-act="ndOpen">${ic('plus',20)}<span>Create Event</span></div>`});
 SC.aevent=()=>{const e=S.event,T=S.teams.length,sh=S.teams.filter(t=>t.short).length,ar=S.teams.filter(t=>t.arrived).length,ac=act0().length,[si,st,sv]=evStatus(e);
  const stat=(cls,i,n,l)=>`<div class="stat ${cls}"><div class="li">${ic(i,20)}</div><div class="n">${n}</div><div class="l">${l}</div></div>`;
  return {tabs:1,bar:`<button class="gb glass" data-act="back">${ic('chl',22)}</button>`,body:`<div style="margin:-118px -20px 18px;position:relative"><div class="poster" style="aspect-ratio:1/.8">${postr(e)}</div><div style="position:absolute;inset:0 0 auto;height:130px;background:linear-gradient(#000,transparent);pointer-events:none"></div><div style="position:absolute;inset:auto 0 0;height:140px;background:linear-gradient(transparent,#000);pointer-events:none"></div></div>
  <div class="lt" style="margin-top:-44px;position:relative">${esc(e.name)}</div>
  <div class="row wrap" style="margin:0 4px ${ownsEv(e)?28:10}px;gap:10px">${e.published?chip(si,st,sv+' st'):chip('draft','Draft','dim st')}${chip('layers',`Stage ${e.closed?S.stages.length:stageIdx()+1}/${S.stages.length}`,'acc st')}${ownsEv(e)?`<button class="chip edit" data-act="aEdit" data-id="${e.id}" aria-label="Edit event">${ic('pencil',15)}<span>Edit</span></button>`:chip('eye','View only','dim st')}${V.org&&e.closed?chip('eye','Read only','red st'):''}</div>
  ${ownsEv(e)?'':`<div class="dim sm" style="margin:0 6px 24px">Created by ${esc(ownerName(e))}. Only they can edit this event.</div>`}
+ <div class="card dkw" style="margin-bottom:16px">${ownsEv(e)?`<div class="lrow tap" data-act="openRegs" data-id="${e.id}"><div class="li">${ic('listp',22)}</div><b class="sp">Registrations</b><span class="nb">${T}</span>${ic('chr',18,'dim')}</div>`:''}<div class="lrow tap" data-act="push" data-n="report"><div class="li">${ic('chart',22)}</div><b class="sp">Event Report</b>${ic('chr',18,'dim')}</div>${V.org||!ownsEv(e)?'':`<div class="lrow tap" data-act="push" data-n="orgs"><div class="li">${ic('orgkey',22)}</div><b class="sp">Manage Organizers</b><span class="nb">${e.access.members.length}</span>${ic('chr',18,'dim')}</div>`}</div>
  <div class="grid2" style="margin-bottom:16px">${stat('hi','regadd',T,'Registered')}${stat('em','seal',sh,'Shortlisted')}${stat('','arrived',ar,'Arrived')}${stat('lt2','active',ac,'Active')}</div>
- <div class="card whc"><div class="lrow tap" data-act="push" data-n="report"><div class="li">${ic('chart',22)}</div><b class="sp">Event Report</b>${ic('chr',18,'dim')}</div>${V.org||!ownsEv(e)?'':`<div class="lrow tap" data-act="push" data-n="access"><div class="li">${ic('orgkey',22)}</div><b class="sp">Organizer Access</b><span class="nb">${e.access.members.length}</span>${ic('chr',18,'dim')}</div>`}</div>
- ${ownsEv(e)?btn('Close Event','archive','data-act="push" data-n="close"','danger'):''}`}};
+ ${ownsEv(e)&&!e.closed?btn('Close Event','archive','data-act="push" data-n="close"','danger'):''}`}};
 const cuRun=el=>{const still=el.classList.contains('rr')||matchMedia('(prefers-reduced-motion:reduce)').matches;el.querySelectorAll('[data-cu]').forEach(n=>{const v=+n.dataset.cu,sf=n.dataset.sf||'';if(still){n.textContent=v+sf;return}n.textContent=0+sf;const t0=performance.now(),step=t=>{const p=Math.min(1,(t-t0)/1000),e=1-Math.pow(1-p,3);n.textContent=Math.round(v*e)+sf;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})};
 SC.report=()=>{const T=S.teams,tot=T.length,sh=T.filter(t=>t.short).length,ar=T.filter(t=>t.arrived).length,el=T.filter(t=>t.elim).length,N=S.stages.length,fin=T.filter(t=>t.stage>=N-1&&!t.elim).length;
  const pc=(a,b)=>b?Math.round(a/b*100):0,mx=Math.max(1,tot),subs=T.reduce((a,t)=>a+t.subs,0);
@@ -1364,17 +1382,23 @@ SC.access=()=>{const e=S.event,a=e.access,M=a.members,[si,sl,sv]=e.closed?['lock
   ${e.closed?`<div class="dim sm">This event is closed. Organizer write access ended automatically.</div>`:`<div class="dim sm">Organizers see only this event. Access ends automatically when it closes.</div>`}</div>
  <div class="sec">${ic('people',16)}<span>Organizers</span></div>
  ${M.length?`<div class="card">${M.map((m,i)=>`<div class="lrow" style="${m.revoked?'opacity:.6':''}">${av(m.name,46)}<div class="sp"><div class="h2" style="font-size:16px">${esc(m.name)}</div><div class="dim xs" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.email)} · ${esc(m.roll)}</div></div><button class="chip wb" data-act="accMem" data-i="${i}">${m.revoked?'Restore':'Revoke'}</button></div>`).join('')}</div>`:empty('people')}`}};
-SC.orgs=()=>{const e=S.event,a=e.access,M=a.members,act=M.filter(m=>!m.revoked).length;
+SC.orgs=()=>{const e=S.event,a=e.access,M=a.members,[si,sl,sv]=e.closed?['lock','Read-only','dim']:a.revoked?['xmark','Revoked','red']:['check','Active','acc'];
  return {tabs:0,bar:bar({back:1,title:'Manage Organizers'}),body:`<div class="lt" style="font-size:28px">${esc(e.name)}</div>
- <div class="row wrap" style="gap:10px;margin:0 4px 20px">${chip('check',act+' active','acc')}${M.length-act?chip('xmark',(M.length-act)+' revoked','red'):''}${a.revoked?chip('lock','Event access revoked','red'):''}${e.closed?chip('lock','Read-only','dim'):''}</div>
- ${M.length?`<div class="card">${M.map((m,i)=>`<div class="lrow" style="align-items:flex-start;${m.revoked?'opacity:.6':''}">${av(m.name,46)}<div class="sp"><div class="h2" style="font-size:16px">${esc(m.name)}</div><div class="dim xs" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.email)}</div><div class="dim xs">${esc(m.roll)} · Added ${fmtD(m.since).split(',')[0]}</div><div style="margin-top:8px">${m.revoked?chip('xmark','Revoked','red'):chip('check','Active','acc')}</div></div><button class="chip wb" data-act="accMem" data-i="${i}">${m.revoked?'Restore':'Revoke'}</button></div>`).join('')}</div>`:empty('people')}
- <div class="card dkw"><div class="lrow tap" data-act="push" data-n="access"><div class="li">${ic('key',22)}</div><div class="sp"><b>Event ID &amp; password</b><div class="dim xs mono">${esc(a.id)}</div></div>${ic('chr',18,'dim')}</div></div>
- <div class="dim sm" style="margin:0 8px">Organizers who sign in with ${esc(a.id)} appear here. Revoking removes their access to this event right away.</div>`}};
+ <div class="card cp col" style="gap:20px;background:linear-gradient(160deg,rgba(0,180,216,.2),rgba(20,16,18,.8))">
+  <div class="row">${chip(si,sl,sv)}<span class="sp"></span>${chip('people',M.length,'dim')}</div>
+  <div class="row" style="gap:14px"><div class="li">${ic('tag',22)}</div><div class="sp"><div class="dim xs b">EVENT ID</div><div class="h1 mono" style="letter-spacing:1px">${esc(a.id)}</div></div></div>
+  <div class="row" style="gap:14px"><div class="li">${ic('key',22)}</div><div class="sp"><div class="dim xs b">PASSWORD</div><div class="h1 mono">${S.pwShow?esc(a.pw):'•'.repeat(a.pw.length)}</div></div><button class="gb glass" data-act="pwShow" aria-label="Show password">${ic('eye',20)}</button></div>
+  <div class="row" style="gap:12px">${btn('Copy','copy','data-act="accCopy"','white')}${btn(a.revoked?'Restore':'Revoke',a.revoked?'check':'xmark','data-act="accRev"',a.revoked?'white':'danger')}</div>
+  <div class="dim sm">${e.closed?'This event is closed. Organizer write access ended automatically.':a.revoked?'Access is revoked for all organizers. Restore to let them in again.':'Revoke removes access for every organizer at once. Access also ends when the event closes.'}</div></div>
+ ${btn('Add Organizer','plus','data-act="orgAdd"','white '+(e.closed||a.revoked?'dis':''))}<div style="height:8px"></div>
+ <div class="sec">${ic('people',16)}<span>Organizers</span></div>
+ ${M.length?`<div class="card">${M.map((m,i)=>`<div class="lrow" style="${m.revoked?'opacity:.6':''}">${av(m.name,46)}<div class="sp"><div class="h2" style="font-size:16px">${esc(m.name)}</div><div class="dim xs" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.email)} · ${esc(m.roll)}</div></div><button class="chip wb" data-act="accMem" data-i="${i}">${m.revoked?'Restore':'Revoke'}</button></div>`).join('')}</div>`:empty('people')}`}};
+SC.access=SC.orgs;
 ['access','orgs'].forEach(k=>{const f=SC[k],t=k==='orgs'?'Manage Organizers':'Organizer Access';SC[k]=()=>ownsEv(S.event)?f():({tabs:0,bar:bar({back:1,title:t}),body:`<div class="col c" style="align-items:center;gap:14px;padding:60px 20px;text-align:center"><div class="li" style="width:88px;height:88px;border-radius:30px">${ic('lock',40)}</div><div class="h1">Locked</div><div class="dim sm">Organizer credentials for ${esc(S.event.name)} are visible only to ${esc(ownerName(S.event))}, who created it.</div></div>`})});
 SC.close=()=>{const e=S.event,T=S.teams.length,ar=S.teams.filter(t=>t.arrived).length,el=S.teams.filter(t=>t.elim).length;
  return {tabs:0,bar:bar({back:1,title:'Close Event'}),body:`<div class="col c" style="align-items:center;gap:22px;padding:10px 0 30px">${e.closed?`<div>${okmark(130)}</div>`:ring(progress(),150,12,`<span style="color:var(--ac)">${ic('archive',58)}</span>`)}<div class="h1">${esc(e.name)}</div></div>
  <div class="card cp row" style="justify-content:space-around;padding:24px 12px">${kpi('regadd',T,T,'Registered')}${kpi('arrived',ar,Math.max(T,1),'Arrived')}${kpi('xmark',el,Math.max(T,1),'Eliminated')}</div>`,
- bottom:`<div class="cta">${e.closed?btn('Event Closed','lock','aria-disabled="true"','locked'):btn('Close Event','archive','data-act="closeEvent" style="background:var(--red);color:#fff"')}</div>`}};
+ bottom:e.closed?'':`<div class="cta">${btn('Close Event','archive','data-act="closeEvent" style="background:var(--red);color:#fff"')}</div>`}};
 SC.create=()=>{if(S.draftFor!==S.cur){S.draft=pickEF(S.event);S.draftFor=S.cur}const d=S.draft,toggle=(k,v,on,i)=>`<span class="chip lg ${on?'sel':''}" data-act="togDraft" data-k="${k}" data-v="${v}">${i?ic(i,16):''}${esc(v)}</span>`;
  const dl=[['reg','regadd'],['start','play'],['submit','upload']].map(([k,i])=>`<label class="fld" style="margin-bottom:12px"><span class="fi">${ic(i,20)}</span><input type="datetime-local" data-date="${k}" value="${toLocal(d.deadlines[k])}"></label>`).join('');
  const stepper=(k,v)=>`<div class="stp"><button class="step" data-act="step" data-k="${k}" data-d="-1">${ic('minus',16)}</button><b class="mono">${v}</b><button class="step" data-act="step" data-k="${k}" data-d="1">${ic('plus',16)}</button></div>`;
@@ -1388,7 +1412,7 @@ SC.create=()=>{if(S.draftFor!==S.cur){S.draft=pickEF(S.event);S.draftFor=S.cur}c
  return {tabs:1,bar:bar({}),body:`<div class="whs"><div class="lt">Edit Event ${pubd?chip('check','Published','em'):chip('draft','Draft','dim')}</div>
  <label class="fld"><span class="fi">${ic('trophy',20)}</span><input data-bind="ev.name" value="${esc(d.name)}" placeholder="Event name"></label>
  <label class="fld"><span class="fi">${ic('pin',20)}</span><input data-bind="ev.venue" value="${esc(d.venue)}" placeholder="Venue"></label>
- ${acc('c-po','image','Poster','',`<div class="row" style="gap:12px;overflow-x:auto;margin:0 -20px;padding:4px 20px">${[0,1,2,3].map(i=>`<div class="tap" data-act="pickPoster" data-i="${i}" style="flex:none;width:140px;border-radius:20px;overflow:hidden;outline:${d.poster===i?'3px solid var(--ac)':'3px solid transparent'};outline-offset:3px"><div class="poster">${poster(i)}</div></div>`).join('')}<div class="tap" data-act="upPoster" style="flex:none;width:140px;aspect-ratio:16/10;border-radius:20px;border:2px dashed var(--fg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ac2);font-size:13px;font-weight:600;outline:${typeof d.poster==='string'?'3px solid var(--ac)':'none'};outline-offset:3px;overflow:hidden">${typeof d.poster==='string'?`<img src="${d.poster}" style="width:100%;height:100%;object-fit:cover">`:`${ic('upload',26)}<span>Upload</span>`}</div></div>`,true)}
+ ${acc('c-po','image','Poster','',`${posterPick(d,'ev','pickPoster','var(--ac)')}`,true)}
  ${V.org?'':acc('c-el','cap','Eligibility',d.years.length+' · '+d.depts.length,`<div class="col" style="gap:14px"><div class="row wrap" style="gap:10px">${[1,2,3,4].map(y=>toggle('years',y,d.years.includes(y),'cap')).join('')}</div><div class="row wrap" style="gap:10px">${['CSE','IT','ECE','AI','EEE','MECH'].map(x=>toggle('depts',x,d.depts.includes(x))).join('')}</div></div>`)}
  ${V.org?'':acc('c-dom','bulb','Domains',d.domains.length,`<div class="row wrap" style="gap:10px">${['AI','Web','Mobile','IoT','Web3','Health','Green','Fin'].map(x=>toggle('domains',x,d.domains.includes(x))).join('')}</div>`)}
  ${V.org?'':acc('c-pr','trophy','Prizes',money(d.prizes[0]),pz)}
@@ -1397,9 +1421,9 @@ SC.create=()=>{if(S.draftFor!==S.cur){S.draft=pickEF(S.event);S.draftFor=S.cur}c
  ${V.org?locked:''}
  ${V.org?'':acc('c-sz','people','Team Size',d.min+'–'+d.max,`<div class="row" style="padding-top:4px"><span class="dim">${ic('person',22)}</span>${stepper('min',d.min)}<span class="sp"></span><span class="dim">${ic('people',22)}</span>${stepper('max',d.max)}</div>`)}
  <div class="card"><div class="lrow tap" data-act="push" data-n="stages"><div class="li">${ic('layers',22)}</div><b class="sp">Stage Builder</b><span class="nb">${S.stages.length}</span>${ic('chr',18,'dim')}</div>${V.org?'':ownsEv(S.event)?`<div class="lrow tap" data-act="push" data-n="orgs"><div class="li">${ic('people',22)}</div><b class="sp">Manage Organizers</b><span class="nb">${S.event.access.members.length}</span>${ic('chr',18,'dim')}</div>`:lockRow('Manage Organizers')}</div></div><div style="height:30px"></div>`,
- bottom:`<div class="cta" style="bottom:104px">${V.org&&!pubd?btn('Not published yet','lock','aria-disabled="true"','locked'):btn(pubd?'Update Event':'Publish Event',pubd?'check':'publish','id="pubbtn" data-act="publish"','white')}</div>`}};
+ bottom:`<div class="cta" style="bottom:104px">${V.org&&!pubd?btn('Not published yet','lock','aria-disabled="true"','locked'):btn(pubd?'Update Event':'Publish Event',pubd?'check':'publish','id="pubbtn" data-act="publish"','white '+(evBad(d)?'dis':''))}</div>`}};
 SH.editEvent=()=>({tall:1,html:'<div id="eov"></div>',mount:box=>{if(V.ov)return;V.ov='edit';V.panes.edit=$('#eov',box);const el=mk('create');V.stacks.edit=[el];V.panes.edit.append(el)}});
-const ND_STEPS=['Basics','Schedule & Teams','Tracks, Prizes & Fee','Links, Rules & Contact'];
+const ND_STEPS=['Basic Hackathon Details','Schedule & Teams','Tracks, Prizes & Fee','Links, Rules & Contact'];
 const ordn=n=>{const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
 const ndMiss=(x,i)=>{const dl=x.deadlines,now=Date.now();
  if(i===0)return !x.name.trim()?'Add an event name':!x.desc.trim()?'Add a short description':!x.mode?'Choose a mode':!x.venue.trim()?(x.mode==='Online'?'Add a platform or link':'Add a venue'):x.poster==null?'Choose a poster':'';
@@ -1409,6 +1433,10 @@ const ndMiss=(x,i)=>{const dl=x.deadlines,now=Date.now();
 const NDMSG={'Check dates':'Dates must run in the future: registration closes, then the event starts, then submissions are due.','Check team size':'The maximum team size must be at least the minimum.'};
 const ndShow=()=>{const el=topEl();refresh(el);const s=$('.scroll',el);s&&s.scrollTo({top:0,behavior:'instant'})};
 const ndWarn=(m,el)=>{el&&(el.classList.add('shake'),setTimeout(()=>el.classList.remove('shake'),450));ask({icon:'xmark',title:m,msg:NDMSG[m]||'This is needed to continue.',cancel:false,danger:1})};
+const ndAll=x=>ND_STEPS.every((_,i)=>!ndMiss(x,i));
+const evBad=x=>{const dl=x.deadlines;return !x.name.trim()||x.poster==null||!x.years.length||!x.domains.length||!x.depts.length||!(dl.reg<dl.start&&dl.start<dl.submit)};
+const syncBtns=()=>{const t=(id,bad)=>{const b=$(id);b&&b.classList.toggle('dis',!!bad)},x=S.nd,y=S.draft;if(x){t('#ndbtn',ndMiss(x,x.step||0));t('#nddraft',!x.name.trim());t('#ndpub',!ndAll(x))}if(y)t('#pubbtn',evBad(y));if(S.sdraft)t('#stsave',S.sdraft.some(z=>!z.name.trim()))};
+['input','change'].forEach(n=>document.addEventListener(n,()=>setTimeout(syncBtns)));
 SC.newev=()=>{const d=S.nd,st=d.step||0,N=ND_STEPS.length,RQ='<span style="color:var(--red)">*</span>',
  tg=(k,v,on,i)=>`<span class="chip lg ${on?'sel':''}" role="button" aria-pressed="${!!on}" data-act="ndTog" data-k="${k}" data-v="${v}">${i?ic(i,16):''}${esc(v)}</span>`,
  req=(t,opt)=>`<div class="dim xs b" style="margin:0 6px 8px;text-transform:uppercase;letter-spacing:.5px">${t} ${opt?'<span style="text-transform:none;font-weight:500">(optional)</span>':RQ}</div>`,
@@ -1417,7 +1445,7 @@ SC.newev=()=>{const d=S.nd,st=d.step||0,N=ND_STEPS.length,RQ='<span style="color
  num=(k,l)=>`<div class="row"><span class="dim sp">${l} ${RQ}</span><label class="row" style="background:var(--s2);border-radius:14px;padding:0 14px;height:44px;width:110px"><input class="mono" type="text" inputmode="numeric" data-nnum="${k}" value="${esc(d[k])}" placeholder="0" autocomplete="off" style="width:100%;font-weight:700;text-align:right"></label></div>`,
  doms=[...new Set(['AI','Web','Mobile','IoT','Web3','Health','Green','Fin',...d.domains])],
  amt=(a,v)=>`<label class="row" style="gap:6px;background:var(--s2);border-radius:14px;padding:0 14px;height:44px;width:128px"><b>₹</b><input class="mono" type="text" inputmode="numeric" ${a} value="${esc(v)}" placeholder="Amount" autocomplete="off" style="width:100%;font-weight:700;text-align:right"></label>`;
- const prog=`<div class="ndp"><div class="k">Step ${st+1} of ${N}</div><div class="n">${ND_STEPS[st]}</div><div class="ndsegs">${ND_STEPS.map((n,i)=>`<i class="${i<st?'done':i===st?'cur':''}" ${i<st?`role="button" aria-label="Back to ${esc(n)}" data-act="ndGo" data-i="${i}"`:''}></i>`).join('')}</div></div>`;
+ const prog=`<div class="ndp"><div class="n">${ND_STEPS[st]}</div><div class="ndsegs">${ND_STEPS.map((n,i)=>`<i class="${i<st?'done':i===st?'cur':''}" ${i<st?`role="button" aria-label="Back to ${esc(n)}" data-act="ndGo" data-i="${i}"`:''}></i>`).join('')}</div></div>`;
   const S0=` <label class="fld"><span class="fi">${ic('trophy',20)}</span><input data-bind="nd.name" value="${esc(d.name)}" placeholder="Event name *"></label>
  <label class="fld"><span class="fi">${ic('bulb',20)}</span><input data-bind="nd.tag" value="${esc(d.tag)}" placeholder="Tagline (optional)"></label>
  <label class="fld ta"><span class="fi">${ic('pencil',20)}</span><textarea data-bind="nd.desc" placeholder="About the hackathon *  Theme, what teams will build, why join">${esc(d.desc)}</textarea></label>
@@ -1425,7 +1453,7 @@ SC.newev=()=>{const d=S.nd,st=d.step||0,N=ND_STEPS.length,RQ='<span style="color
  <div class="row wrap" style="gap:10px;margin-bottom:14px">${[['Offline','pin'],['Online','display'],['Hybrid','hybrid']].map(([m,i])=>tg('mode',m,d.mode===m,i)).join('')}</div>
  <label class="fld"><span class="fi">${ic('pin',20)}</span><input data-bind="nd.venue" value="${esc(d.venue)}" placeholder="${d.mode==='Online'?'Platform / meeting link *':'Venue (hall, campus, city) *'}"></label>
  <div style="height:12px"></div>${req('Poster')}
- <div class="row" style="gap:12px;overflow-x:auto;margin:0 -20px;padding:4px 20px">${[0,1,2,3].map(i=>`<div class="tap" data-act="ndPoster" data-i="${i}" style="flex:none;width:140px;border-radius:20px;overflow:hidden;outline:${d.poster===i?'3px solid #fff':'3px solid transparent'};outline-offset:3px"><div class="poster">${poster(i)}</div></div>`).join('')}<div class="tap" data-act="ndUpPoster" style="flex:none;width:140px;aspect-ratio:16/10;border-radius:20px;border:2px dashed var(--fg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ac2);font-size:13px;font-weight:600;outline:${typeof d.poster==='string'?'3px solid #fff':'none'};outline-offset:3px;overflow:hidden">${typeof d.poster==='string'?`<img src="${d.poster}" style="width:100%;height:100%;object-fit:cover">`:`${ic('upload',26)}<span>Upload</span>`}</div></div>`;
+ ${posterPick(d,'nd','ndPoster','#fff')}`;
  const S1=` ${lb('Schedule','clock')}
  ${dt('reg','regadd','Registration closes')}${dt('start','play','Hackathon starts')}${dt('submit','upload','Submissions due · event ends')}
  ${lb('Teams','people')}
@@ -1452,14 +1480,18 @@ SC.newev=()=>{const d=S.nd,st=d.step||0,N=ND_STEPS.length,RQ='<span style="color
  <label class="fld"><input data-bind="nd.phone" type="tel" value="${esc(d.phone)}" placeholder="Contact phone (optional)"></label>
  <div class="card cp row" style="gap:14px;align-items:flex-start;margin-top:22px"><div class="li">${ic('layers',22)}</div><div class="sp"><b>Want more stages?</b><div class="dim sm" style="margin-top:4px">We'll start you off with four stages: Registration, Ideation, Prototype and Final Pitch. After you create the event, open it and tap Edit, then Stage Builder, to add or change stages whenever you like.</div></div></div>`;
  return {tabs:0,bar:bar({left:`<button class="gb glass" data-act="ndBack" aria-label="Back">${ic('chl',22)}</button>`}),body:`${prog}${[S0,S1,S2,S3][st]}<div style="height:150px"></div>`,
- bottom:st<N-1?`<div class="cta">${btn('Next','','data-act="ndNext"','white')}</div>`:`<div class="cta" style="display:flex;gap:12px">${btn('Save Draft','draft','data-act="ndCreate" data-pub="0" style="flex:1"','ghost')}${btn('Publish','upload','data-act="ndCreate" data-pub="1" style="flex:1"','white')}</div>`}};
+ bottom:st<N-1?`<div class="cta">${btn('Next','','id="ndbtn" data-act="ndNext"','white '+(ndMiss(d,st)?'dis':''))}</div>`:`<div class="cta" style="display:flex;gap:12px">${btn('Save Draft','draft','id="nddraft" data-act="ndCreate" data-pub="0" style="flex:1"','ghost '+(d.name.trim()?'':'dis'))}${btn('Publish','upload','id="ndpub" data-act="ndCreate" data-pub="1" style="flex:1"','white '+(ndAll(d)?'':'dis'))}</div>`}};
 const DELIVS=['Presentation','Source Code','Demo Video','Prototype','Report','Live Demo'];
+const postLib=()=>S.postLib||(S.postLib=[...new Set(S.evs.map(e=>e.poster).filter(p=>typeof p==='string'))].reverse());
+const postList=d=>{if(d===S.nd)return d.poster!=null?[d.poster]:[];const L=postLib();return d.poster!=null&&!L.includes(d.poster)?[d.poster,...L]:L};
+const postDraft=c=>c==='nd'?S.nd:S.draft;
+const posterPick=(d,ctx,act,col)=>`<div class="row" style="gap:12px;overflow-x:auto;margin:0 -20px;padding:4px 20px">${postList(d).map((p,i)=>`<div style="position:relative;flex:none;width:140px"><div class="tap" role="button" aria-pressed="${d.poster===p}" data-act="${act}" data-i="${i}" style="border-radius:20px;overflow:hidden;outline:${d.poster===p?'3px solid '+col:'3px solid transparent'};outline-offset:3px"><div class="poster">${poster(p)}</div></div><button class="pdel" aria-label="Remove poster" data-act="postDel" data-c="${ctx}" data-i="${i}">${ic('xmark',14)}</button></div>`).join('')}<div class="tap" role="button" data-act="${ctx==='nd'?'ndUpPoster':'upPoster'}" style="flex:none;width:140px;aspect-ratio:16/10;border-radius:20px;border:2px dashed var(--fg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ac2);font-size:13px;font-weight:600">${ic('upload',26)}<span>Upload</span></div></div>`;
 const stg=s=>Object.assign({desc:'',crit:[],deliv:[],note:'',poster:null},s);
 const gh=(t,f)=>`<div class="dim xs b" style="margin:22px 8px 8px;text-transform:uppercase;letter-spacing:.5px">${t}</div>`;
 const gf=t=>`<div class="dim xs" style="margin:8px 8px 0">${t}</div>`;
 SC.stages=()=>{if(S.sdraftFor!==S.cur){S.sdraft=clone(S.stages).map(stg);S.sdraftFor=S.cur}const L=S.sdraft;return {tabs:0,bar:bar({back:1,title:'Stage Builder',right:`<button class="gp wbtn" data-act="stAdd">${ic('plus',20)}<span>Add</span></button>`}),
  body:`<div class="whs"><div class="dim sm" style="margin:0 8px 14px">Set what happens in each stage. Tap a stage to add details, evaluation criteria and its own poster.</div><div class="card">${L.map((s,i)=>`<div class="lrow tap" data-act="stOpen" data-i="${i}"><div class="li">${ic(SIC[i%SIC.length],22)}</div><div class="sp"><b>${esc(s.name)}</b><div class="dim xs" style="margin-top:3px">${fmtD(s.deadline)}${s.crit.length?' · '+s.crit.length+(s.crit.length==1?' criterion':' criteria'):''}</div></div>${s.poster!=null&&s.poster!==''?`<span style="color:var(--ac)">${ic('image',18)}</span>`:''}${ic('chr',18,'dim')}</div>`).join('')}</div><div style="height:40px"></div></div>`,
- bottom:`<div class="cta">${btn('Save Stages','check','data-act="stSave"','white')}</div>`}};
+ bottom:`<div class="cta">${btn('Save Stages','check','id="stsave" data-act="stSave"','white '+(L.some(z=>!z.name.trim())?'dis':''))}</div>`}};
 SC.stage=({i})=>{const s=S.sdraft[i];if(!s)return{tabs:0,bar:bar({back:1,title:'Stage'}),body:''};
  const row=(l,inner)=>`<div class="lrow" style="padding:10px 18px;min-height:52px"><span class="dim" style="width:84px;flex:none">${l}</span>${inner}</div>`,hasP=s.poster!=null&&s.poster!=='';
  return {tabs:0,bar:bar({left:`<button class="gb glass" data-act="stBack">${ic('chl',22)}</button>`,title:esc(s.name||'Stage')}),
@@ -1477,7 +1509,7 @@ SH.stageInfo=({n})=>{const s=stg(S.stages[n]),T=(t,b)=>`<div class="dim xs b" st
  ${s.deliv.length||s.note?T('Deliverables',`${s.deliv.length?`<div class="row wrap" style="gap:8px">${s.deliv.map(d=>chip('upload',d,'acc')).join('')}</div>`:''}${s.note?`<div class="dim sm" style="margin:10px 4px 0">${esc(s.note)}</div>`:''}`):''}
  ${!s.desc&&!s.crit.length&&!s.deliv.length&&!s.note?'<div class="dim sm" style="margin:18px 4px 0">No extra details for this stage yet.</div>':''}`}};
 SC.regs=()=>{const f=S.regFilter||'all',L=f==='all'?rgFirst():S.teams.filter(t=>f==='flag'?t.flag:t.elim);
- return {tabs:1,bar:bar({}),body:`<div class="lt">Registrations <span class="nb">${S.teams.length}</span></div>${evsw()}
+ return {tabs:0,bar:bar({back:1}),body:`<div class="lt">Registrations <span class="nb">${S.teams.length}</span></div><div class="dim sm" style="margin:-8px 6px 16px">${esc(S.event.name)}</div>
  ${usgH([['all','All'],['flag','Flagged'],['elim','Eliminated']],f,'regF')}
  ${f==='all'?`<div class="dim xs b" style="margin:0 8px 8px;text-transform:uppercase;letter-spacing:.5px">${L.length<S.teams.length?'Earliest '+L.length+' teams':'Teams'}</div>`:''}
  <div class="card">${L.length?L.map(t=>`<div class="lrow tap" style="${t.elim?'opacity:.55':''}" data-act="rgTeam" data-id="${t.id}">${av(t.name,46)}<div class="sp"><div class="h2">${esc(t.name)}${t.id===S.me?' '+ic('person',14,''):''}</div><div class="dim sm">${esc(t.roll)} · ${esc(t.dept)} · ${t.mem.length}</div>${t.flag&&t.flagNote&&!t.elim?`<div class="xs" style="color:var(--red);margin-top:3px">${esc(t.flagNote)}</div>`:''}</div>${t.short&&!t.elim?`<span style="color:var(--em)">${ic('seal',20)}</span>`:''}${t.elim?`<span style="color:var(--red)">${ic('xmark',22)}</span>`:`<button class="gb" style="width:44px;height:44px;color:${t.flag?'var(--red)':'var(--fg3)'}" data-act="flagT" data-id="${t.id}">${ic(t.flag?'flagf':'flag',22)}</button>`}</div>`).join(''):empty('list')}</div>
@@ -1516,17 +1548,17 @@ SC.team=({id})=>{const t=S.teams.find(x=>x.id===id),N=S.stages.length,last=t.sta
 SC.amsgs=()=>{const own=canMsg(),la=annAll().slice().sort((a,b)=>b.ts-a.ts)[0],hs=Object.entries(S.help).filter(([id,th])=>th.msgs.length&&S.teams.find(x=>x.id===id)).sort((a,b)=>b[1].ts-a[1].ts)[0],hm=hs&&hs[1].msgs[hs[1].msgs.length-1],ht=hs&&S.teams.find(x=>x.id===hs[0]),oc=S.orgChat[S.orgChat.length-1];
  const R=[convRow({n:'announcements',icon:'megaphone',title:'Announcements',sub:la?esc(la.title):'Nothing posted yet',time:la?ago(la.ts):''}),convRow({n:'inbox',icon:'help',title:'Help Desk',lock:!own,sub:hm?pvw(ht.name+' · '+hm.w,hm.m):'No messages yet',badge:own&&helpUN()||'',time:hm?ago(hm.ts):''}),convRow({n:'orgchat',icon:'group',title:'Organizers',lock:!own,sub:oc?pvw(oc.me?'You':oc.w,oc.m):'Start the conversation'})];
  return {tabs:1,bar:bar({right:acctBtn()}),body:msgBody(`<div class="card" style="padding:0;overflow:hidden">${R.join('')}</div>`)}};
-const lockedTab=(k)=>{const e=S.event,L=k==='live';return {tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">${L?'Live':'Registrations'}</div>${evsw()}<div class="col c" style="align-items:center;gap:16px;padding:30px 12px 20px;text-align:center"><div class="lkart"><i></i><i></i><div class="li lk">${ic(L?'live':'listp',44)}<span class="lkb">${ic('lock',18)}</span></div></div><div class="h1">${L?'Live is private':'Registrations are private'}</div><div class="dim" style="max-width:300px;font-size:15px">${esc(ownerName(e))} created ${esc(e.name)}, so only they can ${L?'monitor its live activity':'see its registrations'}. Switch to an event you own to continue.</div><div class="row wrap" style="justify-content:center;gap:10px">${chip('person',ownerName(e),'acc')}${chip('eye','View only','dim')}</div></div>`}};
+const lockedTab=(k)=>{const e=S.event,L=k==='live';return {tabs:L?1:0,bar:L?bar({right:acctBtn()}):bar({back:1}),body:`<div class="lt">${L?'Live':'Registrations'}</div>${L?evsw():''}<div class="col c" style="align-items:center;gap:16px;padding:30px 12px 20px;text-align:center"><div class="lkart"><i></i><i></i><div class="li lk">${ic(L?'live':'listp',44)}<span class="lkb">${ic('lock',18)}</span></div></div><div class="h1">${L?'Live is private':'Registrations are private'}</div><div class="dim" style="max-width:300px;font-size:15px">${esc(ownerName(e))} created ${esc(e.name)}, so only they can ${L?'monitor its live activity':'see its registrations'}. Switch to an event you own to continue.</div><div class="row wrap" style="justify-content:center;gap:10px">${chip('person',ownerName(e),'acc')}${chip('eye','View only','dim')}</div></div>`}};
 ['regs','live'].forEach(k=>{const f=SC[k];SC[k]=a=>ownsEv(S.event)?f(a):lockedTab(k)});
 const PICKI={pass:['ticket','My Pass','Pick an event to see your pass and QR code.'],space:['map','Event Space','Pick an event to follow its stages and deadlines.'],msgs:['chats','Messages','Pick an event to open its chats and announcements.'],amsgs:['chats','Messages','Pick one of your events to open its chats and announcements.'],regs:['listp','Registrations','Pick one of your events to review its registrations.'],live:['live','Live','Pick one of your events to monitor it live.'],ahome:['calendar','My Event','Pick an event to open its dashboard.']};
 const pickTab=k=>{const [sym,t,sub]=PICKI[k],O=['trophy','ticket','people','bolt','megaphone','flag'];return {tabs:1,bar:bar({right:acctBtn()}),body:`<div class="lt">${t}</div><div class="pick"><div class="pickart" role="img" aria-label="No event selected"><div class="pk-glow"></div><i class="pk-ring r1"></i><i class="pk-ring r2"></i><div class="pk-orbit">${O.map((n,i)=>{const g=i*60*Math.PI/180;return `<span class="pk-orb" style="left:${(50+42*Math.sin(g)).toFixed(1)}%;top:${(50-42*Math.cos(g)).toFixed(1)}%">${ic(n,22)}</span>`}).join('')}</div><div class="pk-core">${ic(sym,50)}</div></div>
  <div class="pk-t">Select an event</div><div class="pk-s">${sub}</div><div style="margin-top:8px;width:100%">${btn('Choose Event','calendar','data-act="evOpen"','white')}</div></div>`}};
-['pass','space','msgs','amsgs','regs','live','ahome'].forEach(k=>{const f=SC[k];if(f)SC[k]=a=>(S.picked||k==='ahome')?f(a):pickTab(k)});
+['space','msgs','amsgs','live','ahome'].forEach(k=>{const f=SC[k];if(f)SC[k]=a=>(S.picked||k==='ahome')?f(a):pickTab(k)});
 /* ---------- sheets ---------- */
 SH.apple=({busy,who})=>({nodismiss:!!busy,title:'Sign in with Apple',html:`<div class="col c" style="align-items:center;gap:20px;padding-top:10px"><div style="width:68px;height:68px;border-radius:22px;background:var(--fg);color:#000;display:grid;place-items:center">${ic('apple',38)}</div>
  ${busy?`<div style="padding:34px 0" class="col c"><div class="row" style="justify-content:center"><div class="spin" style="color:var(--ac)">${ic('face',64)}</div></div></div>`:`<div class="card" style="width:100%;margin:0">${APPLE_IDS.map((p,i)=>`<div class="lrow tap" data-act="appleGo" data-i="${i}">${av(p.n,48)}<div class="sp" style="text-align:left"><div class="h2">${p.n}</div><div class="dim xs">${p.m}</div></div>${p.l?`<span class="chip ${p.old?'acc':'dim'}">${p.l}</span>`:''}</div>`).join('')}</div>`}</div>`});
 SH.auth=()=>{const a=S.au,f=a.f,st=a.step,up=a.mode==='up';
- const back=a.hist.length?`<button class="gb glass" data-act="auBack">${ic('chl',22)}</button>`:'';let ttl='';
+ const back=a.hist.length||a.from?`<button class="gb glass" data-act="auBack">${ic('chl',22)}</button>`:'';let ttl='';
  const head=(i,T,t,s)=>{ttl=T;return `<div class="row" style="margin-bottom:18px;gap:14px"><div class="li">${ic(i,24)}</div><div class="sp"><div class="h2">${t}</div>${s?`<div class="dim sm" style="margin-top:2px">${s}</div>`:''}</div></div>`};
  const seg=(items,cur,act)=>`<div class="seg" style="margin-bottom:16px">${items.map(([k,l])=>`<span class="chip lg ${cur===k?'sel':''}" style="flex:1;justify-content:center;padding:0 6px" data-act="${act}" data-v="${k}">${l}</span>`).join('')}</div>`;
  const fl=(i,k,ph,o={})=>`<label class="fld"><span class="fi">${ic(i,20)}</span><input data-bind="au.${k}" type="${o.t||'text'}" placeholder="${ph}" value="${esc(f[k])}" autocomplete="off" ${o.x||''}>${o.ok!==undefined?`<span class="ok ${o.ok?'on':''}" data-ok="${k}">${ic('check',20)}</span>`:''}</label>`;
@@ -1652,6 +1684,8 @@ const ROLE_L={p:'Participant',o:'Organizer',a:'Admin'};
 const mailRe=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const nrm=s=>String(s||'').trim().toLowerCase();
 const pwErr=p=>!p?'':p.length<8?'Length should at least be 8 characters.':!/[A-Z]/.test(p)?'Add at least one uppercase letter.':!/[a-z]/.test(p)?'Add at least one lowercase letter.':!/\d/.test(p)?'Add at least one number.':!/[^A-Za-z0-9\s]/.test(p)?'Add at least one special symbol.':'';
+const ROLES=[['p','cap','Participant','Find hackathons, register, submit your project and see your results.'],['o','orgrole','Organizer','Run an event: check in teams, review submissions and announce winners.'],['a','adminrole','Admin','Set up your institute, create hackathons and manage organizers.']];
+SH.roles=()=>({title:'Choose Your Role',html:`<div class="dim sm" style="margin:0 8px 16px;text-align:center">Pick how you will use Orbit. You can sign in or create an account next.</div><div class="card" style="margin:0;padding:0;overflow:hidden">${ROLES.map(([k,i,n,d],j)=>`<div class="lrow tap" role="button" data-act="authOpen" data-r="${k}" data-from="roles" style="${j==ROLES.length-1?'border-bottom:0':''}"><div class="li">${ic(i,24)}</div><div class="sp"><b style="font-weight:600">${n}</b><div class="dim sm" style="margin-top:2px">${d}</div></div><span class="dim">${ic('chr',18)}</span></div>`).join('')}</div>`});
 const AU_INFO={p:['cap','Are you a student looking to take part in events?','Join hackathons, build teams and submit your projects.'],o:['orgrole','Has your Admin asked you to help run an event?','Check in teams, share updates and keep the event on track.'],a:['adminrole','Do you create and manage events for your institute?','Set up events, assign organizers and oversee every result.']};
 const AU_DEMO={p:'riya.sharma@campus.edu',o:'divya.k@campus.edu',a:'arjun.nair@campus.edu'},AU_DEMOPW='Orbit@2026';
 const findAcct=em=>{em=nrm(em);return em&&DB.accts.find(a=>nrm(a.ie)===em||nrm(a.pe)===em)};
@@ -1674,7 +1708,7 @@ function orgGate(act){const e=S.event;
  if(e.closed&&MUT.has(act)){toast('lock','Event closed · read-only');return false}
  return true}
 const auNew=o=>Object.assign({role:'p',mode:'in',step:'start',hist:[],f:{name:'',roll:'',code:'',ie:'',pe:'',pw:'',email:'',evid:'',evpw:''},otp:{code:'',tries:3,until:0,val:''},otpTo:'',err:'',apple:null,purpose:'in',acct:null,ctx:null},o||{});
-function authOpen(role,mode){S.au=auNew({role,mode,step:mode==='up'?'profile':'start'});sheet('auth')}
+function authOpen(role,mode,from){S.au=auNew({role,mode,step:mode==='up'?'profile':'start',from});sheet('auth',null,from?'fwd':0)}
 function auOK(){const a=S.au,f=a.f;switch(a.step){
  case 'start':return mailRe.test(f.email.trim())&&!!f.pw;
  case 'profile':return f.name.trim().length>=2&&(a.role==='a'?!!INST[f.code.trim()]:f.roll.trim().length>=3)&&mailRe.test(f.ie.trim())&&mailRe.test(f.pe.trim())&&nrm(f.pe)!==nrm(f.ie)&&f.pw.length>0&&!pwErr(f.pw);
@@ -1695,7 +1729,17 @@ function auVerify(){const a=S.au,o=a&&a.otp;if(!a||a.step!=='otp'||o.tries<=0||o
  if(inp){inp.value='';o.tries<=0?inp.disabled=true:inp.focus({preventScroll:true})}
  a.err=o.tries>0?'Incorrect code. Try again.':'Too many attempts. Request a new code.';const er=$('#auerr');er&&(er.textContent=a.err);
  const tr=$('#autries');tr&&(tr.textContent=o.tries>0?o.tries+(o.tries==1?' attempt':' attempts')+' left':'No attempts left')}
+const orgSync=ac=>S.evs.forEach(e=>{if(!ac.events.includes(e.id)&&e.access.members.some(m=>nrm(m.email)===nrm(ac.ie)&&!m.revoked))ac.events.push(e.id)});
+const omDup=()=>{const m=S.om,e=S.event;return e.access.members.some(x=>nrm(x.email)===nrm(m.email)||nrm(x.roll)===nrm(m.roll))};
+const omOK=()=>{const m=S.om;return m.name.trim().length>=2&&m.roll.trim().length>=3&&mailRe.test(m.email.trim())&&!omDup()};
+SH.addOrg=()=>{const m=S.om;return {title:'Add Organizer',html:`<div class="dim sm" style="margin:0 8px 16px">They will see only ${esc(S.event.name)} after they sign in as an Organizer.</div>
+ <label class="fld"><span class="fi">${ic('person',20)}</span><input data-bind="om.name" placeholder="Full name" value="${esc(m.name)}" autocomplete="off"></label>
+ <label class="fld"><span class="fi">${ic('idcard',20)}</span><input data-bind="om.roll" placeholder="Organizer ID" value="${esc(m.roll)}" autocomplete="off"></label>
+ <label class="fld"><span class="fi">${ic('bank',20)}</span><input data-bind="om.email" type="email" placeholder="Institute email" value="${esc(m.email)}" autocomplete="off"></label>
+ <div id="omerr" class="xs" style="color:var(--red);margin:-6px 8px 12px;font-weight:600;${m.email.trim()&&m.roll.trim()&&omDup()?'':'display:none'}">This organizer is already added to this event.</div>
+ ${btn('Add Organizer','plus','id="ombtn" data-act="orgSave"','white '+(omOK()?'':'dis'))}`}};
 function auFinishIn(){const a=S.au,ac=a.acct;
+ if(ac.role==='o')orgSync(ac);
  if(ac.role==='o'&&!ac.events.map(getEv).some(e=>orgOK(e,ac))){a.step='event';a.hist=[];a.ctx=null;a.err=ac.events.length?'Your admin revoked your earlier event access. Join an event to continue.':'';return refreshSheet()}
  enterSession(ac)}
 function auCreate(){const a=S.au,f=a.f;
@@ -1721,7 +1765,7 @@ function partSwap(id){if(PART.cur===id)return;
 function enterSession(ac){if(ac.role==='p')partSwap(ac.id);V.acct=ac;V.org=null;
  if(ac.role==='p')Object.assign(ST[0],{n:ac.name,roll:ac.roll||ST[0].roll,email:ac.ie,dept:ac.dept||'',adm:ac.adm||null,year:ac.adm?Math.min(4,Math.max(1,2027-ac.adm)):ST[0].year,phone:ac.phone||ST[0].phone});
  else if(ac.role==='a')Object.assign(ADM,{n:ac.name,email:ac.ie,phone:ac.phone||'',org:INST[ac.code].name});
- else{const L=ac.events.map(getEv).filter(e=>orgOK(e,ac));if(!L.length){S.au=auNew({role:'o',step:'event',acct:ac});sheet('auth');return}V.org=ac;S.cur=L[0].id}
+ else{orgSync(ac);const L=ac.events.map(getEv).filter(e=>orgOK(e,ac));if(!L.length){S.au=auNew({role:'o',step:'event',acct:ac});sheet('auth');return}V.org=ac;S.cur=L[0].id}
  S.pf=null;S.draftFor=null;S.sdraftFor=null;S.liveF='all';S.regFilter='all';closeSheet(true);startRole(ac.role==='p'?'p':'a')}
 /* team invitations (participant side) */
 function respondInv(id,yes){const v=S.invites.find(x=>x.id==id);if(!v||v.st!=='pending')return;const e=getEv(v.ev),t=e.teams.find(x=>x.id===v.tid),p=(t.pend||[]).find(x=>x.inv===v.id);
@@ -1748,17 +1792,17 @@ function simResp(t,p,yes,ms){setTimeout(()=>{const e=S.evs.find(x=>x.teams.inclu
 function simInvites(t){(t.pend||[]).slice(0,2).forEach((p,k)=>simResp(t,p,k===0,5000+k*4500))}
 setInterval(()=>{if(!curSheet||curSheet.name!=='auth'||!S.au||S.au.step!=='otp')return;const b=$('#aurs');if(!b)return;const s=Math.ceil((S.au.otp.until-Date.now())/1000);b.classList.toggle('off',s>0);b.textContent=s>0?'Resend in 0:'+pad(s):'Resend code'},500);
 Object.assign(A,{
- authOpen:d=>authOpen(d.r,'in'),
+ authOpen:d=>authOpen(d.r,'in',d.from),
  auMode:d=>{const a=S.au;a.mode=d.v;a.step=d.v==='up'?'profile':'start';a.hist=[];a.err='';refreshSheet()},
  auPw:(d,el)=>{const i=el.parentNode.querySelector('input');i.type=i.type==='password'?'text':'password'},
  auDemoIn:()=>{const a=S.au;a.f.email=AU_DEMO[a.role];a.f.pw=AU_DEMOPW;a.err='';refreshSheet()},
- auBack:()=>{const a=S.au;a.step=a.hist.pop()||a.step;a.err='';refreshSheet()},
+ auBack:()=>{const a=S.au;if(!a.hist.length&&a.from){sheet('roles',null,'back');return}a.step=a.hist.pop()||a.step;a.err='';refreshSheet()},
  auApple:()=>sheet('apple'),
  pfPick:d=>{S.pf.dept=d.v;S.pf.other=false;refreshSheet()},pfOther:()=>{S.pf.other=true;S.pf.dept='';refreshSheet()},pfAdm:d=>{S.pf.adm=d.v;refreshSheet()},
  pfSave:()=>{if(!pfOK()||!V.acct)return;const d=pfDept(),y=+S.pf.adm;V.acct.dept=d;V.acct.adm=y;if(V.role==='p')Object.assign(ST[0],{dept:d,adm:y,year:yrOf(y)});S.pf=null;refreshSheet();refreshAll();toast('check','Profile saved')},
  ntGo:d=>{const n=S.nts.find(x=>x.id==d.id);if(!n)return;closeSheet(true);if(V.role==='p'){n.dest&&dest(n);return}
   if(n.ev!=null&&(!V.org||orgEvs().some(e=>e.id===n.ev))){S.cur=n.ev;S.draftFor=null;S.sdraftFor=null;refreshAll()}
-  if(n.go==='help'){switchTab('msgs',true);push('inbox');n.tid&&push('helpthread',{id:n.tid})}else if(n.go==='orgchat'){switchTab('msgs',true);push('orgchat')}else if(n.go==='regs'||n.go==='live')switchTab(n.go,true);else if(n.go==='access'&&!V.org&&ownsEv(getEv(n.ev))){switchTab('home',true);push('aevent',{});push('access',{})}},
+  if(n.go==='help'){switchTab('msgs',true);push('inbox');n.tid&&push('helpthread',{id:n.tid})}else if(n.go==='orgchat'){switchTab('msgs',true);push('orgchat')}else if(n.go==='regs'){V.src=null;switchTab('home',true);push('aevent',{});push('regs')}else if(n.go==='live')switchTab('live',true);else if(n.go==='access'&&!V.org&&ownsEv(getEv(n.ev))){switchTab('home',true);push('aevent',{});push('access',{})}},
  auDemo:()=>{const f=S.au.f;f.evid=ev0.access.id;f.evpw=ev0.access.pw;S.au.err='';refreshSheet()},
  auResend:()=>{const a=S.au;if(Date.now()<a.otp.until)return;auSend(a.otpTo);toast('mail','New code sent')},
  auNext:(d,el)=>{const a=S.au,f=a.f,st=a.step;if(!auOK())return;
@@ -1780,6 +1824,8 @@ Object.assign(A,{
  invYes:d=>respondInv(d.id,true),invNo:d=>respondInv(d.id,false),
  memAdd:()=>{S.mm={name:'',roll:'',email:'',ctx:'reg'};sheet('addMember')},
  mmFill:d=>{const s=ST[+d.i];Object.assign(S.mm,{name:s.n,roll:s.roll,email:s.email});refreshSheet()},
+ orgAdd:()=>{S.om={name:'',roll:'',email:''};sheet('addOrg')},
+ orgSave:()=>{if(!omOK())return;const m=S.om,e=S.event,em=m.email.trim();e.access.members.push({email:em,name:m.name.trim(),roll:m.roll.trim(),since:Date.now(),revoked:false});DB.accts.filter(a=>a.role==='o'&&nrm(a.ie)===nrm(em)).forEach(orgSync);closeSheet(true);refreshAll();toast('check','Organizer added')},
  mmSave:()=>{if(!mmOK()){if(!mmElig())toast('lock','Not eligible for this event');return}const m=S.mm;
   if(m.ctx==='team'){const e=S.event,t=meT();if(!isLeader(t)||teamLocked(e,t)){closeSheet();return toast('lock','Team is fixed')}
    if(!m.rep&&actN(t)>=e.max)return toast('xmark','Team is full');
@@ -1836,12 +1882,12 @@ function binRain(land){
  size();
  if(!calm)requestAnimationFrame(tick)}
 function showSignIn(){$('#homebar').style.display='none';V.role=null;V.tab=null;V.org=null;V.acct=null;S.au=null;stopCam();$('#banners').innerHTML='';const app=$('#app');app.className='';app.innerHTML=`<div class="land"><div class="lstack up"><div class="lhero">${logo(188)}<div class="lname">Orbit</div><div class="ltag">Discover. Build. Repeat. Compete.</div></div>
- <div class="grp"><div class="lbtn" data-act="authOpen" data-r="p">${ic('cap',26)}<span>Join as Participant</span></div><div class="lbtn" data-act="authOpen" data-r="o">${ic('orgrole',26)}<span>Continue as Organizer</span></div><div class="lbtn" data-act="authOpen" data-r="a">${ic('adminrole',26)}<span>Continue as Admin</span></div><div class="lor"><i></i><span>or</span><i></i></div><div class="lbtn pale" data-act="sheet" data-n="apple">${ic('apple',26)}<span>Sign in with Apple</span></div></div></div></div>`;$('#sheets').classList.remove('on');binRain($('.land'))}
+ <div class="grp"><div class="lbtn" data-act="sheet" data-n="roles"><span>Get Started</span></div><div class="lor"><i></i><span>or</span><i></i></div><div class="lbtn pale" data-act="sheet" data-n="apple">${ic('apple',20)}<span>Sign in with Apple</span></div></div></div></div>`;$('#sheets').classList.remove('on');binRain($('.land'))}
 /* ---------- actions ---------- */
-function afterInput(o){if(o==='pf'){const x=$('#pfprev');x&&(x.textContent=abbr(S.pf.custom)||'—');const b=$('#pfsave');b&&b.classList.toggle('dis',!pfOK())}if(o==='au')auInput();if(o==='mm'){const b=$('#mmbtn');b&&b.classList.toggle('dis',!mmOK());const r=$('#mmerr');r&&(r.style.display=mmElig()?'none':'')}if(o==='form')updateReg();if(o==='sub')updateSub();if(o==='ann'){const d=S.annDraft,b=$('#annbtn'),c=$('#anncnt');c&&(c.textContent=d.body.length+'/160');b&&b.classList.toggle('dis',!(d.type&&d.title.trim()&&d.body.trim()))}}
+function afterInput(o){if(o==='om'){const b=$('#ombtn');b&&b.classList.toggle('dis',!omOK());const r=$('#omerr');r&&(r.style.display=S.om.email.trim()&&S.om.roll.trim()&&omDup()?'':'none')}if(o==='pf'){const x=$('#pfprev');x&&(x.textContent=abbr(S.pf.custom)||'—');const b=$('#pfsave');b&&b.classList.toggle('dis',!pfOK())}if(o==='au')auInput();if(o==='mm'){const b=$('#mmbtn');b&&b.classList.toggle('dis',!mmOK());const r=$('#mmerr');r&&(r.style.display=mmElig()?'none':'')}if(o==='form')updateReg();if(o==='sub')updateSub();if(o==='ann'){const d=S.annDraft,b=$('#annbtn'),c=$('#anncnt');c&&(c.textContent=d.body.length+'/160');b&&b.classList.toggle('dis',!(d.type&&d.title.trim()&&d.body.trim()))}}
 function updateReg(){const o=regOK(),k=Object.keys(o),n=k.filter(x=>o[x]).length;k.forEach(x=>{const e=$(`[data-ok="${x}"]`);e&&e.classList.toggle('on',o[x])});const a=$('#regarc');a&&(a.style.animation='none',a.style.strokeDashoffset=a.dataset.c*(1-n/k.length));const c=$('#regn');c&&(c.textContent=n+'/'+k.length);const b=$('#regbtn');b&&b.classList.toggle('dis',n<k.length);const pc=$('#pcount');if(pc){const n2=S.form.problem.length,ok=o.problem;pc.textContent=n2;$('#pden').textContent=ok?'/200':'/'+PMIN+' min';$('#pcw').style.color=ok?'var(--ac)':'var(--fg2)'}}
 function updateSub(){const s=S.sub,v=s.type==='file'?(s.file&&s.prog>=100):urlRe.test(s.val.trim());const b=$('#subbtn');b&&b.classList.toggle('dis',!v);const o=$('[data-ok="sub"]');o&&o.classList.toggle('on',v)}
-document.addEventListener('input',e=>{const t=e.target,b=t.dataset&&t.dataset.bind;if(b){const [o,k]=b.split('.');const m={form:S.form,sub:S.sub,nd:S.nd,ev:S.draft,ann:S.annDraft,au:S.au&&S.au.f,mm:S.mm,pf:S.pf,chat:S.chatIn||(S.chatIn={}),post:S.postIn||(S.postIn={})}[o];m[k]=t.value;
+document.addEventListener('input',e=>{const t=e.target,b=t.dataset&&t.dataset.bind;if(b){const [o,k]=b.split('.');const m={form:S.form,sub:S.sub,nd:S.nd,ev:S.draft,ann:S.annDraft,au:S.au&&S.au.f,mm:S.mm,om:S.om,pf:S.pf,chat:S.chatIn||(S.chatIn={}),post:S.postIn||(S.postIn={})}[o];m[k]=t.value;
   if(o==='chat'){$('#chatsend').classList.toggle('dis',!t.value.trim())}else if(o==='post'){$('#postsend').classList.toggle('dis',!t.value.trim())}else afterInput(o)}
  if(t.dataset&&t.dataset.otp!=null)otpIn(t);
  if(t.dataset&&t.dataset.nprize!=null){const v=t.value.replace(/\D/g,'').slice(0,9);if(v!==t.value)t.value=v;S.nd.prizes[+t.dataset.nprize]=v}
@@ -1850,7 +1896,7 @@ document.addEventListener('input',e=>{const t=e.target,b=t.dataset&&t.dataset.bi
  if(t.dataset&&t.dataset.prize!=null){const v=t.value.replace(/\D/g,'').slice(0,9);if(v!==t.value)t.value=v;S.draft.prizes[+t.dataset.prize]=+v||0;const a=$('#acc-c-pr .as');a&&(a.textContent=money(S.draft.prizes[0]))}
  if(t.dataset&&t.dataset.sname!=null)S.sdraft[+t.dataset.sname].name=t.value});
 document.addEventListener('change',e=>{const t=e.target;if(t.dataset.date){const v=new Date(t.value).getTime();if(!isNaN(v))S.draft.deadlines[t.dataset.date]=v}if(t.dataset.ndate){const v=t.value?new Date(t.value).getTime():null;if(v===null||!isNaN(v))S.nd.deadlines[t.dataset.ndate]=v}if(t.dataset.sdate!=null){const v=new Date(t.value).getTime();if(!isNaN(v))S.sdraft[+t.dataset.sdate].deadline=v}
- if(t.id==='fposter'&&t.files[0]){const r=new FileReader();r.onload=()=>{(S.posterTo==='st'&&S.sdraft?S.sdraft[S.stI]:S.posterTo==='nd'&&S.nd?S.nd:S.draft).poster=r.result;refresh(topEl())};r.readAsDataURL(t.files[0])}
+ if(t.id==='fposter'&&t.files[0]){const r=new FileReader();r.onload=()=>{const tg=S.posterTo==='st'&&S.sdraft?S.sdraft[S.stI]:S.posterTo==='nd'&&S.nd?S.nd:S.draft;tg.poster=r.result;if(tg!==(S.sdraft&&S.sdraft[S.stI])||S.posterTo!=='st')postLib().unshift(r.result);refresh(topEl())};r.readAsDataURL(t.files[0])}
  if(t.id==='fsub'&&t.files[0]){S.sub.file=t.files[0].name;S.sub.prog=0;refreshSheet();clearInterval(A._pi);A._pi=setInterval(()=>{S.sub.prog=Math.min(100,S.sub.prog+10);const b=$('#fprog');b&&(b.style.width=S.sub.prog+'%');if(S.sub.prog>=100){clearInterval(A._pi);updateSub()}},120)}});
 document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.phone!=null){const v=t.value.replace(/[^\d+ ]/g,'').slice(0,16);t.value=v;phSet(v);toast('check','Phone saved');if(curSheet&&curSheet.name==='profile'){S.pf&&afterInput('pf');if(V.acct&&V.acct.dept&&V.acct.adm&&phOK())refreshSheet()}refreshAll()}});
 document.addEventListener('keydown',e=>{const rb=e.target.closest&&e.target.closest('[role=button][tabindex]');if(rb&&(e.key==='Enter'||e.key===' ')){e.preventDefault();rb.click()}if(e.key==='Enter'&&e.target.id==='chatin')A.sendChat({k:$('#chatsend').dataset.k});if(e.key==='Enter'&&e.target.id==='postin')A.sendPost();if(e.key==='Enter'&&curSheet&&(curSheet.name==='auth'||curSheet.name==='addMember')){const b=$('#aubtn')||$('#mmbtn');b&&!b.classList.contains('dis')&&b.click()}});
@@ -1871,7 +1917,9 @@ Object.assign(A,{
  swLock:d=>{const e=getEv(+d.v);toast('lock','Only '+ownerName(e)+' can view '+e.name)},
  msgLock:()=>toast('lock','Only members of this event can read this channel'),
  setEv:d=>{closeSheet(true);if(d.v!=='join'&&d.v!=='new')rec(+d.v);if(d.v==='join')return A.joinOpen();if(d.v==='new')return A.ndOpen();S.cur=+d.v;S.draftFor=null;S.sdraftFor=null;S.liveF='all';S.regFilter='all';refreshAll()},
- goEv:d=>{closeSheet(true);rec(+d.id);const pk=S.picked;S.cur=+d.id;if(V.role==='a')S.picked=pk;S.draftFor=null;S.sdraftFor=null;switchTab(V.role==='a'?'home':'pass',true);refreshAll();if(V.role==='a')push('aevent',{})},
+ openPass:d=>{const pk=S.picked;S.cur=+d.id;S.picked=pk;S.draftFor=null;S.sdraftFor=null;V.src=null;refreshAll();push('pass');if(S.finalized)setTimeout(()=>{S.passSeen=true;updateBadges()},900)},
+ openRegs:d=>{const pk=S.picked;S.cur=+d.id;S.picked=pk;S.regFilter='all';refreshAll();push('regs')},
+ goEv:d=>{closeSheet(true);rec(+d.id);const pk=S.picked;S.cur=+d.id;if(V.role==='a')S.picked=pk;S.draftFor=null;S.sdraftFor=null;V.src=null;switchTab(V.role==='a'?'home':'events',true);refreshAll();if(V.role==='a')push('aevent',{});else{push('details',{id:+d.id});push('pass')}},
  newEvent:()=>{const id=Math.max(...S.evs.map(e=>e.id))+1;S.evs.push(mkEv({id,owner:ADM.email,name:'New Hackathon',venue:'Venue',poster:id%4,years:[1,2,3,4],depts:['CSE','IT','ECE'],domains:[],prizes:[30000,20000,10000],min:2,max:4,t0:Date.now(),published:false,
    deadlines:{reg:Date.now()+5*D,start:Date.now()+6*D,submit:Date.now()+8*D},stages:[{name:'Registration',deadline:Date.now()+5*D},{name:'Ideation',deadline:Date.now()+6*D},{name:'Prototype',deadline:Date.now()+7*D},{name:'Final Pitch',deadline:Date.now()+8*D}]}));
    S.cur=id;S.draftFor=null;S.sdraftFor=null;S.open['c-po']=true;switchTab('setup',true);toast('plus','New event')},
@@ -1917,7 +1965,7 @@ Object.assign(A,{
  pickDept:d=>{S.form.dept=d.v;closeSheet();refresh(topEl())},
  submitReg:(d,el)=>{const o=regOK();if(Object.values(o).includes(false))return;el.classList.add('busy');setTimeout(()=>{const e=getEv(S.regEv),f=S.form;const t=mkTeam('me'+e.id,f.name.trim(),[0],f.problem.trim());t.roll=f.roll.trim();t.dept=f.dept;t.links={};(e.links||[]).forEach(k=>t.links[k]=f[k]);t.regAt=Date.now();t.pend=f.mem.map((m,i)=>({n:m.name,roll:m.roll,email:m.email,st:'pending',inv:'r'+Date.now()+i}));e.teams.unshift(t);note(['a','o'],{ev:e.id,icon:'regadd',title:'New registration',sub:t.name+' · '+e.name,go:'regs'});e.me=t.id;e.chat=tmChat();e.act.push({ic:'regadd',tx:t.name,ts:Date.now()});S.cur=e.id;simInvites(t);setTimeout(()=>toast('mail','Invites sent to '+t.pend.length+' member'+(t.pend.length==1?'':'s')),1700);
    const a=$('#alerts');a.innerHTML=`<div class="col c up" style="align-items:center;gap:14px">${okmark(130,false,'#fff')}<b>Registered successfully</b></div>`;a.classList.add('on');
-   setTimeout(()=>{a.classList.remove('on');a.innerHTML='';const st=V.stacks.events;while(st.length>1)st.pop().remove();st[0].classList.remove('behind');switchTab('pass',true)},1300)},900)},
+   setTimeout(()=>{a.classList.remove('on');a.innerHTML='';const st=V.stacks.events;while(st.length>1)st.pop().remove();st[0].classList.remove('behind');V.src=null;switchTab('events',true);push('details',{id:e.id});push('pass')},1300)},900)},
  togRemind:()=>{S.remind=!S.remind;if(S.remind)scheduleReminder(6000);$$('.tile.rem').forEach(t=>t.classList.toggle('on',S.remind));$$('.sw[data-act^="togRemind"]').forEach(t=>t.classList.toggle('on',S.remind))},togRemind2:()=>A.togRemind(),
  togNotif:()=>{S.notifOn=!S.notifOn;refreshSheet()},
  calT:d=>{S.calSel[+d.i]=!S.calSel[+d.i];refreshSheet()},
@@ -1939,7 +1987,7 @@ Object.assign(A,{
  ndAddPrize:()=>{const x=S.nd;x.prizes.push('');refresh(topEl());const i=$(`[data-nprize="${x.prizes.length-1}"]`,topEl());i&&i.focus()},
  ndDelPrize:()=>{S.nd.prizes.pop();refresh(topEl())},
  ndTog:d=>{const x=S.nd;if(d.k==='mode'){x.mode=d.v}else if(d.k==='fee'){x.paid=d.v==='Paid'}else{const a=x[d.k],v=d.k==='years'?+d.v:d.v,i=a.indexOf(v);i>=0?a.splice(i,1):a.push(v)}refresh(topEl())},
- ndPoster:d=>{S.nd.poster=+d.i;refresh(topEl())},
+ ndPoster:d=>{S.nd.poster=postList(S.nd)[+d.i];refresh(topEl())},
  ndUpPoster:()=>{S.posterTo='nd';const i=$('#fposter');i.value='';i.click()},
  ndAddDom:()=>{const i=$('#ndcd'),v=i.value.trim().slice(0,16);if(!v)return;if(!S.nd.domains.includes(v))S.nd.domains.push(v);refresh(topEl())},
  ndCreate:(d,el)=>{const x=S.nd,pub=d.pub==='1',now=Date.now();
@@ -1948,13 +1996,14 @@ Object.assign(A,{
   el.classList.add('busy');setTimeout(()=>{const id=Math.max(...S.evs.map(e=>e.id))+1,mid=dl.start+(dl.submit-dl.start)/2;
    S.evs.push(mkEv(Object.assign(clone(x),{step:undefined,mode:x.mode||'Offline',poster:x.poster==null?S.evs.length%4:x.poster,min:+x.min||2,max:+x.max||4,cap:+x.cap||100,prizes:x.prizes.map(n=>+n||0),paid:x.paid===true,fee:+x.fee||0,deadlines:dl,id,t0:now,inst:adminInst(),owner:ADM.email,published:pub,stages:[{name:'Registration',deadline:dl.reg},{name:'Ideation',deadline:dl.start},{name:'Prototype',deadline:Math.round(mid)},{name:'Final Pitch',deadline:dl.submit}]})));
    S.cur=id;S.draftFor=null;S.sdraftFor=null;S.nd=null;pop();switchTab('home',true);refreshAll();toast('check',pub?'Event published':'Draft saved');setTimeout(()=>{const ac=getEv(id).access;ask({icon:'lock',title:'Organizer access ready',msg:ac.id+'  ·  '+ac.pw+'  —  share with your organizers. You can revoke it anytime from the event.',ok:'Done',cancel:false})},700)},700)},
- pickPoster:d=>{S.draft.poster=+d.i;refresh(topEl())},
+ postDel:d=>{const x=postDraft(d.c),p=postList(x)[+d.i];S.postLib=postLib().filter(q=>q!==p);if(x.poster===p)x.poster=null;refresh(topEl())},
+ pickPoster:d=>{S.draft.poster=postList(S.draft)[+d.i];refresh(topEl())},
  upPoster:()=>{S.posterTo=null;const i=$('#fposter');i.value='';i.click()},
  togDraft:d=>{const a=S.draft[d.k],v=d.k==='years'?+d.v:d.v,i=a.indexOf(v);i>=0?a.splice(i,1):a.push(v);refresh(topEl())},
  step:d=>{const x=S.draft;x[d.k]=Math.min(8,Math.max(1,x[d.k]+ +d.d));if(x.min>x.max){d.k==='min'?x.max=x.min:x.min=x.max}refresh(topEl())},
  aEdit:d=>{S.cur=+d.id;S.draftFor=null;S.sdraftFor=null;refreshAll();sheet('editEvent')},
- publish:(d,el)=>{const x=S.draft,dl=x.deadlines;const bad=!x.name.trim()||!x.years.length||!x.domains.length||!x.depts.length||!(dl.reg<dl.start&&dl.start<dl.submit);
-  if(bad){el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),450);ask({icon:'xmark',title:!x.name.trim()?'Add a name':!x.domains.length?'Pick a domain':'Check dates',msg:'Dates must run register, start, submit.',cancel:false,danger:1});return}
+ publish:(d,el)=>{const x=S.draft,dl=x.deadlines;const bad=!x.name.trim()||x.poster==null||!x.years.length||!x.domains.length||!x.depts.length||!(dl.reg<dl.start&&dl.start<dl.submit);
+  if(bad){el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),450);ask({icon:'xmark',title:!x.name.trim()?'Add a name':x.poster==null?'Choose a poster':!x.domains.length?'Pick a domain':'Check dates',msg:'Dates must run register, start, submit.',cancel:false,danger:1});return}
   el.classList.add('busy');setTimeout(()=>{const was=S.event.published;Object.assign(S.event,clone(x),{published:true});S.draftFor=null;closeSheet(true);refreshAll();toast('check',was?'Event updated':'Event published')},800)},
  stAdd:()=>{if(S.sdraft.length>=6)return;const l=S.sdraft[S.sdraft.length-1];S.sdraft.push(stg({name:'Stage '+(S.sdraft.length+1),deadline:(l?l.deadline:Date.now())+D}));refresh(topEl())},
  stOpen:d=>{S.stI=+d.i;push('stage',{i:+d.i})},
